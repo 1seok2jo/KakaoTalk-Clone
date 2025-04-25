@@ -33,6 +33,6 @@
 
 ---
 
-## 🖼️ 프로젝트 이미지
+## 🖼️ ERD 이미지
 
-![프로젝트 이미지](https://github.com/user-attachments/assets/0b1e1b56-dbb4-4a33-97ac-88a109f4d339)
+![ERD 이미지](https://github.com/user-attachments/assets/0b1e1b56-dbb4-4a33-97ac-88a109f4d339)
