@@ -1,4 +1,4 @@
-title: "[WEEK] Weekly Progress"
+title: "[WEEK] 0주차 (0/00~0/00)"
 labels: ["Weekly"]
 body:
   - type: markdown
@@ -20,5 +20,3 @@ body:
         | 지윤식 | | | |
         | 박범진 | | | |
         | 정휘상 | | | |
-    validations:
-      required: true
