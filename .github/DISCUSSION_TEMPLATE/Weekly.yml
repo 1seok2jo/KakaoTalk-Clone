@@ -20,6 +20,5 @@ body:
         | 지윤식 | | | |
         | 박범진 | | | |
         | 정휘상 | | | |
-      render: bash
     validations:
       required: true
