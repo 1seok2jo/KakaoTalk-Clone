@@ -1,5 +1,5 @@
 title: "[WEEK] Weekly Progress"
-labels: ["Weekly Progress"]
+labels: ["Weekly_Progress"]
 body:
   - type: markdown
     attributes:
