@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
+import oneseoktwojo.ohtalkhae.domain.auth.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,16 +26,9 @@ public class AuthService {
             return UserRegisterResult.DUPLICATED_PHONE;
         }
 
-        User user = new User(
-                null,
-                request.getUsername(),
-                request.getPassword(),
-                request.getPhone(),
-                request.getEmail(),
-                request.getBirthday(),
-                0L,
-                Role.ROLE_USER.toString(),
-                null);
+        User user = UserMapper.INSTANCE.toUser(request);
+        user.setRole(Role.ROLE_USER.toString());
+        user.setPoint(0L);
         authRepository.save(user);
 
         return UserRegisterResult.SUCCESS;
