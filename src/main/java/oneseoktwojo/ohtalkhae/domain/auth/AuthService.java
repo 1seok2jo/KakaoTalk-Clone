@@ -7,8 +7,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
+
+    private final AuthRepository authRepository;
+
+    public AuthService(AuthRepository authRepository) {
+        this.authRepository = authRepository;
+    }
+
     @Transactional
     public UserRegisterResult Register(UserRegisterRequest request) {
+        if (authRepository.existsByUsername(request.getUsername())) {
+            return UserRegisterResult.DUPLICATED_USERNAME;
+        } else if (authRepository.existsByEmail(request.getEmail())) {
+            return UserRegisterResult.DUPLICATED_EMAIL;
+        } else if (authRepository.existsByPhone(request.getPhone())) {
+            return UserRegisterResult.DUPLICATED_PHONE;
+        }
 
         User user = new User(
                 null,
@@ -20,6 +34,8 @@ public class AuthService {
                 0L,
                 Role.ROLE_USER.toString(),
                 null);
-        return UserRegisterResult.UNKNOWN_ERROR;
+        user = authRepository.save(user);
+
+        return UserRegisterResult.SUCCESS;
     }
 }
