@@ -17,7 +17,7 @@ public class AuthService {
     }
 
     @Transactional
-    public UserRegisterResult Register(UserRegisterRequest request) {
+    public UserRegisterResult register(UserRegisterRequest request) {
         if (authRepository.existsByUsername(request.getUsername())) {
             return UserRegisterResult.DUPLICATED_USERNAME;
         } else if (authRepository.existsByEmail(request.getEmail())) {

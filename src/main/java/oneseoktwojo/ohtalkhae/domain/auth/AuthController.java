@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequest request) {
-        UserRegisterResult result = authService.Register(request);
+        UserRegisterResult result = authService.register(request);
         if (result == UserRegisterResult.SUCCESS) {
             return ApiResponse.success(200, "User registered successfully.");
         } else if (result == UserRegisterResult.DUPLICATED_USERNAME) {
