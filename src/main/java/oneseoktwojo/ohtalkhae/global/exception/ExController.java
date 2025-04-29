@@ -29,7 +29,7 @@ public class ExController {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResponse<?> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        return ApiResponse.error(400, "Invalid Request Body", "요청 본문이 없거나 잘못된 형식입니다.");
+        return ApiResponse.error(400, "Invalid Request Body");
     }
 //    @ExceptionHandler
 }

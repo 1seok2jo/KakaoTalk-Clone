@@ -19,6 +19,7 @@ public class UserRegisterRequest {
     @Size(min = 4, max = 20)
     private String username;
     @NotNull(message = "Password is required.")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?\":{}|<>]).*$", message = "Must contain at least one uppercase letter, lowercase letter, number, and special character.")
     @Size(min = 8, max = 32)
     private String password;
     @NotNull(message = "Phone number is required.")
