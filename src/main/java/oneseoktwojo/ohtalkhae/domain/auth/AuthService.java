@@ -35,7 +35,7 @@ public class AuthService {
                 0L,
                 Role.ROLE_USER.toString(),
                 null);
-        user = authRepository.save(user);
+        authRepository.save(user);
 
         return UserRegisterResult.SUCCESS;
     }
