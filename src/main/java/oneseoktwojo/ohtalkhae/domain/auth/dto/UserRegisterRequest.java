@@ -1,19 +1,33 @@
 package oneseoktwojo.ohtalkhae.domain.auth.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserRegisterRequest {
+    @NotNull(message = "Username is required.")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Invalid username.")
+    @Size(min = 4, max = 20)
     private String username;
+    @NotNull(message = "Password is required.")
+    @Size(min = 8, max = 32)
     private String password;
+    @NotNull(message = "Phone number is required.")
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "Invalid phone number.")
     private String phone;
+    @NotNull(message = "Email is required.")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Invalid email format.")
+    @Size(min = 6, max = 100) // a@b.cd 만 해도 6자리이므로 6자리 아래는 잘못된 입력
     private String email;
-    private LocalDateTime birthday;
+    @NotNull(message = "Birthday is required.")
+    private LocalDate birthday;
 }

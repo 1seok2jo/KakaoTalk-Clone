@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,11 +20,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    @Column(unique = true)
     private String username;
     private String password;
+    @Column(unique = true)
     private String phone;
+    @Column(unique = true)
     private String email;
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     private Long point;
     private String role;
     @CreatedDate
