@@ -2,7 +2,7 @@ package oneseoktwojo.ohtalkhae.domain.auth;
 
 import jakarta.validation.Valid;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
-import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterResult;
+import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

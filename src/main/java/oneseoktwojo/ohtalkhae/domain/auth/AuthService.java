@@ -2,7 +2,8 @@ package oneseoktwojo.ohtalkhae.domain.auth;
 
 import jakarta.transaction.Transactional;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
-import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterResult;
+import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
+import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import org.springframework.stereotype.Service;
 
 @Service

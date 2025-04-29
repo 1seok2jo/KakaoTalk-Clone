@@ -1,4 +1,4 @@
-package oneseoktwojo.ohtalkhae.domain.auth.dto;
+package oneseoktwojo.ohtalkhae.domain.auth.enums;
 
 public enum UserRegisterResult {
     SUCCESS, DUPLICATED_USERNAME, DUPLICATED_EMAIL, DUPLICATED_PHONE, UNKNOWN_ERROR;
