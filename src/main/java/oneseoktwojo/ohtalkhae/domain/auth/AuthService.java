@@ -5,15 +5,19 @@ import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.domain.auth.mapper.UserMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
     private final AuthRepository authRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthService(AuthRepository authRepository) {
+
+    public AuthService(AuthRepository authRepository, BCryptPasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -27,7 +31,9 @@ public class AuthService {
         }
 
         User user = UserMapper.INSTANCE.toUser(request);
+
         user.setRole(Role.ROLE_USER.toString());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPoint(0L);
         authRepository.save(user);
 
