@@ -1,6 +1,6 @@
 package oneseoktwojo.ohtalkhae.config;
 
-import oneseoktwojo.ohtalkhae.domain.auth.jwt.LoginFilter;
+import oneseoktwojo.ohtalkhae.domain.auth.filter.LoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(formLogin -> formLogin.loginProcessingUrl("/auth/login").disable())
+                .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests

@@ -1,6 +1,5 @@
-package oneseoktwojo.ohtalkhae.domain.auth.jwt;
+package oneseoktwojo.ohtalkhae.domain.auth.filter;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +13,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
     public LoginFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+        super(authenticationManager);
+        // Set the URL to which the filter will respond
+        setFilterProcessesUrl("/auth/login");
     }
 
     @Override
@@ -26,7 +26,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
-        return authenticationManager.authenticate(authenticationToken);
+        return getAuthenticationManager().authenticate(authenticationToken);
     }
 
     @Override
