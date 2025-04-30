@@ -4,17 +4,23 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import oneseoktwojo.ohtalkhae.domain.auth.dto.CustomUserDetails;
+import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
-    public LoginFilter(AuthenticationManager authenticationManager) {
+    private final JWTUtil jwtUtil;
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         super(authenticationManager);
+        this.jwtUtil = jwtUtil;
         // Set the URL to which the filter will respond
         setFilterProcessesUrl("/auth/login");
     }
@@ -31,11 +37,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        System.out.println("LoginFilter.successfulAuthentication");
+        CustomUserDetails userDetails = (CustomUserDetails) authResult.getPrincipal();
+        String username = userDetails.getUsername();
+
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        String role = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse(null);
+        String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L); // 1 hour expiration time
+
+        response.addHeader("Authorization", "Bearer " + token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        System.out.println("LoginFilter.unsuccessfulAuthentication");
+        // Handle unsuccessful authentication
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Authentication failed: " + failed.getMessage());
+        // TODO: 글로벌 예외 처리기를 사용하도록 수정할 것
     }
 }
