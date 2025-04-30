@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JWTUtil {
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
     public JWTUtil(@Value("spring.jwt.secret") String secretKey) {
         this.secretKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
