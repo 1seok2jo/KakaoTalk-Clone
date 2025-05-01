@@ -30,7 +30,7 @@ public class PushNotificationController {
     }
 
     private String parseDeviceName(String userAgentString) {
-        if (!userAgentString.isBlank()) {
+        if (userAgentString != null && !userAgentString.isBlank()) {
             UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
             String browser = userAgent.getBrowser().getName();
             String os = userAgent.getOperatingSystem().getName();
