@@ -56,7 +56,7 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
 
         // then
         Optional<PushSubscription> opSubscription = pushSubscriptionRepository.findById(saved.getSubscriptionId());
-        assertThat(opSubscription.isPresent()).isEqualTo(false);
+        assertThat(opSubscription.isEmpty());
     }
 
     @DisplayName("존재하지 않는 웹 푸시 구독 정보를 삭제해도 예외를 던지지 않습니다.")
