@@ -22,16 +22,21 @@ public class AuthController {
     @PostMapping("/register")
     public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequest request) {
         UserRegisterResult result = authService.register(request);
-        if (result == UserRegisterResult.SUCCESS) {
-            return ApiResponse.success(200, "User registered successfully.");
-        } else if (result == UserRegisterResult.DUPLICATED_USERNAME) {
-            return ApiResponse.error(400, "Duplicated username.");
-        } else if (result == UserRegisterResult.DUPLICATED_EMAIL) {
-            return ApiResponse.error(400, "Duplicated email.");
-        } else if (result == UserRegisterResult.DUPLICATED_PHONE) {
-            return ApiResponse.error(400, "Duplicated phone number.");
-        } else {
-            return ApiResponse.error(500, "Unknown error occurred.");
+        return createRegisterResponse(result);
+    }
+
+    private ApiResponse<?> createRegisterResponse(UserRegisterResult result) {
+        switch (result) {
+            case SUCCESS:
+                return ApiResponse.success(200, "User registered successfully.");
+            case DUPLICATED_USERNAME:
+                return ApiResponse.error(400, "Duplicated username.");
+            case DUPLICATED_EMAIL:
+                return ApiResponse.error(400, "Duplicated email.");
+            case DUPLICATED_PHONE:
+                return ApiResponse.error(400, "Duplicated phone number.");
+            default:
+                return ApiResponse.error(500, "Unknown error occurred.");
         }
     }
 }

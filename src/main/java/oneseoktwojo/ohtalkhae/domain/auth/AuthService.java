@@ -32,7 +32,7 @@ public class AuthService {
 
         User user = UserMapper.INSTANCE.toUser(request);
 
-        user.setRole(Role.ROLE_USER.toString());
+        user.setRole(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPoint(0L);
         authRepository.save(user);
