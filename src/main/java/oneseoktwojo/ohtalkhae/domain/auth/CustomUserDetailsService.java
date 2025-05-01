@@ -11,19 +11,17 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final AuthRepository authRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
 
-    public CustomUserDetailsService(AuthRepository authRepository, BCryptPasswordEncoder passwordEncoder) {
+    public CustomUserDetailsService(AuthRepository authRepository) {
         this.authRepository = authRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = authRepository.findByUsername(username);
 
-        if (user != null && user.getPassword() != null && passwordEncoder.matches(user.getPassword(), user.getPassword())) {
+        if (user != null) {
             return new CustomUserDetails(user);
         }
 
