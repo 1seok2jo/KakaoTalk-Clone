@@ -2,6 +2,7 @@ package oneseoktwojo.ohtalkhae.global.exception;
 
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,6 +31,11 @@ public class ExController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResponse<?> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         return ApiResponse.error(400, "Invalid Request Body");
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ApiResponse<?> handleGeneralException(Exception ex) {
+        return ApiResponse.error(401, "Unauthorized");
     }
 //    @ExceptionHandler
 }
