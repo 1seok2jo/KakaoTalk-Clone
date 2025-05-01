@@ -20,5 +20,4 @@ public class ApiResponse<T> {
     public static ApiResponse<?> error(int status, String message) {
         return new ApiResponse<>(status, message, null);
     }
-    public static ApiResponse<?> error(int status, String message, Object data) { return new ApiResponse<>(status, message, data); }
 }
