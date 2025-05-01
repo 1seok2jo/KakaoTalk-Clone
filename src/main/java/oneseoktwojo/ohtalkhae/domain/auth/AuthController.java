@@ -26,17 +26,12 @@ public class AuthController {
     }
 
     private ApiResponse<?> createRegisterResponse(UserRegisterResult result) {
-        switch (result) {
-            case SUCCESS:
-                return ApiResponse.success(200, "User registered successfully.");
-            case DUPLICATED_USERNAME:
-                return ApiResponse.error(400, "Duplicated username.");
-            case DUPLICATED_EMAIL:
-                return ApiResponse.error(400, "Duplicated email.");
-            case DUPLICATED_PHONE:
-                return ApiResponse.error(400, "Duplicated phone number.");
-            default:
-                return ApiResponse.error(500, "Unknown error occurred.");
-        }
+        return switch (result) {
+            case SUCCESS -> ApiResponse.success(200, "User registered successfully.");
+            case DUPLICATED_USERNAME -> ApiResponse.error(400, "Duplicated username.");
+            case DUPLICATED_EMAIL -> ApiResponse.error(400, "Duplicated email.");
+            case DUPLICATED_PHONE -> ApiResponse.error(400, "Duplicated phone number.");
+            default -> ApiResponse.error(500, "Unknown error occurred.");
+        };
     }
 }

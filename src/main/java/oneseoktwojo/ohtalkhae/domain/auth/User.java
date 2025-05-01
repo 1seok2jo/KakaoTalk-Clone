@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
-import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
