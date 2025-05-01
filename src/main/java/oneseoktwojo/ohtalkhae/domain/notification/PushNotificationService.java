@@ -24,8 +24,9 @@ public class PushNotificationService {
 
     @Transactional
     public void unsubscribe(PushSubscribeRequest request) {
-        Optional<PushSubscription> opSubscription = pushSubscriptionRepository.findByEndPoint(request.getEndPoint());
-        opSubscription.ifPresent(pushSubscriptionRepository::delete);
+        Optional<PushSubscription> subscriptionOptional =
+                pushSubscriptionRepository.findByEndPoint(request.getEndPoint());
+        subscriptionOptional.ifPresent(pushSubscriptionRepository::delete);
     }
 
 }

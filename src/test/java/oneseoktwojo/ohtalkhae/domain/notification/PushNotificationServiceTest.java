@@ -59,6 +59,18 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
         assertThat(opSubscription.isPresent()).isEqualTo(false);
     }
 
+    @DisplayName("존재하지 않는 웹 푸시 구독 정보를 삭제해도 예외를 던지지 않습니다.")
+    @Test
+    void unsubscribeNotExist() {
+        // given
+        Long userId = 1L;
+        String endPoint = "https://fcm.googleapis.com/fcm/send/cx1Ykq8bSxE:APA91bF3YX98k0p-EXAMPLE_END_POINT";
+        PushSubscribeRequest request = createPushSubscribeRequest(userId, endPoint);
+
+        // when then
+        pushNotificationService.unsubscribe(request);
+    }
+
     private PushSubscribeRequest createPushSubscribeRequest(Long userId, String endPoint) {
         return PushSubscribeRequest.builder()
                 .userId(userId)
