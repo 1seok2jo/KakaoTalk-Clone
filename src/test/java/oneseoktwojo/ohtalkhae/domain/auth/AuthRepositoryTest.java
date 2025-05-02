@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.jwt.secret=testsetsetsetsetsetsetsetset")
 class AuthRepositoryTest {
     @Autowired
     private AuthRepository authRepository;
