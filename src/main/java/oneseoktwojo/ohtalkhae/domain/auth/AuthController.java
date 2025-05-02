@@ -1,6 +1,7 @@
 package oneseoktwojo.ohtalkhae.domain.auth;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
@@ -8,13 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/register")
     public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequest request) {

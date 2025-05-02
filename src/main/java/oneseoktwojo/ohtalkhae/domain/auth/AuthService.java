@@ -1,6 +1,7 @@
 package oneseoktwojo.ohtalkhae.domain.auth;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
@@ -9,16 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final AuthRepository authRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-
-
-    public AuthService(AuthRepository authRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.authRepository = authRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Transactional
     public UserRegisterResult register(UserRegisterRequest request) {
