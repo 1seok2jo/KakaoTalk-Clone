@@ -1,4 +1,4 @@
-package oneseoktwojo.ohtalkhae.domain.emoji;
+package oneseoktwojo.ohtalkhae.domain.emoji.entity;
 
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

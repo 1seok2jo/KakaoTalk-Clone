@@ -1,8 +1,9 @@
-package oneseoktwojo.ohtalkhae.domain.emoji;
+package oneseoktwojo.ohtalkhae.domain.emoji.controller;
 
 import lombok.RequiredArgsConstructor;
 oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiListResponse;
 oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiRegisterResponse;
+import oneseoktwojo.ohtalkhae.domain.emoji.service.EmojiService;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.request.EmojiRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiDetailResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiListResponse;
