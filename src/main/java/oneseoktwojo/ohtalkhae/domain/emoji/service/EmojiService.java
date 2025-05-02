@@ -6,6 +6,8 @@ import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiDetailResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiListResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiPurchaseCheckResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiRegisterResponse;
+import oneseoktwojo.ohtalkhae.domain.emoji.repository.EmojiImageRepository;
+import oneseoktwojo.ohtalkhae.domain.emoji.repository.EmojiRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EmojiService {
+
+    private final EmojiRepository emojiRepository;
+    private final EmojiImageRepository emojiImageRepository;
 
     public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request, String sellerName) {
         // TODO: 이모티콘 등록 로직 구현
