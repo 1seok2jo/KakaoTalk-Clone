@@ -3,16 +3,11 @@ package oneseoktwojo.ohtalkhae.domain.auth.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@Getter @Setter
-@NoArgsConstructor
+@Data
 public class UserRegisterRequest {
     @NotNull(message = "Username is required.")
     @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "Invalid username.")
