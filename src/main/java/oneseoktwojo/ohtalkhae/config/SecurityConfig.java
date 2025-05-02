@@ -1,5 +1,6 @@
 package oneseoktwojo.ohtalkhae.config;
 
+import oneseoktwojo.ohtalkhae.domain.auth.filter.JWTFilter;
 import oneseoktwojo.ohtalkhae.domain.auth.filter.LoginFilter;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/logout").permitAll()
                         .requestMatchers("/auth/verify").permitAll()
                         .anyRequest().authenticated())
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
