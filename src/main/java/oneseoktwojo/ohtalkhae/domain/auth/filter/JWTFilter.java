@@ -43,17 +43,27 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword("n/a");
-        user.setRole(Role.valueOf(role));
+        try {
+            String username = jwtUtil.getUsername(token);
+            String role = jwtUtil.getRole(token);
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword("n/a");
+            user.setRole(Role.valueOf(role));
 
-        CustomUserDetails userDetails = new CustomUserDetails(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            CustomUserDetails userDetails = new CustomUserDetails(user);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(
+                    ApiResponse.error(401, "Invalid or tampered token")
+            ));
+            return;
+        }
 
         filterChain.doFilter(request, response);
     }
