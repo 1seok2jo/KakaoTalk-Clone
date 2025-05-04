@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
+import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
@@ -29,7 +29,8 @@ public class User {
     private String email;
     private LocalDate birthday;
     private Long point;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @CreatedDate
     private LocalDateTime createdAt;
 }
