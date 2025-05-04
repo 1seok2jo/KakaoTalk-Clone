@@ -23,7 +23,7 @@ public class UserProfileService {
     private final UserRepository userRepository;
 
     public String uploadProfileImage(Long userId, MultipartFile file) throws IOException {
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("업로드할 파일이 없습니다.");
         }
 
