@@ -24,3 +24,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+webpush:
+  public-key: BBtyefD63XsMWfBgtJtzZ-Elh9lt3P68G6oKMoJMDUsjNAOEQjqvxOV-OgDYJuLWlIAc8YaQ2TCkzn2bkiIhDO0=
+  private-key: ODSO8Kqw0AMFHT4koLhNxG9ZwfY5jDOwG59EbRcZwZM
