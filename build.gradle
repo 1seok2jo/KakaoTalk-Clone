@@ -51,8 +51,8 @@ dependencies {
     implementation 'eu.bitwalker:UserAgentUtils:1.21'
     // https://mvnrepository.com/artifact/nl.martijndwars/web-push
     implementation 'nl.martijndwars:web-push:5.1.2'
-    // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
-    implementation 'org.apache.httpcomponents.client5:httpclient5:5.4.4'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
     implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
     // https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j
