@@ -34,6 +34,10 @@ public class ExController {
         return ApiResponse.error(400, "Invalid Request Body");
     }
 
+
+
+
+    
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
