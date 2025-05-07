@@ -1,4 +1,4 @@
-package oneseoktwojo.ohtalkhae.domain.profile;
+package oneseoktwojo.ohtalkhae.domain.profile.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
