@@ -1,37 +1,37 @@
 package oneseoktwojo.ohtalkhae.domain.auth;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
     @PostMapping("/register")
     public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequest request) {
         UserRegisterResult result = authService.register(request);
-        if (result == UserRegisterResult.SUCCESS) {
-            return ApiResponse.success(200, "User registered successfully.");
-        } else if (result == UserRegisterResult.DUPLICATED_USERNAME) {
-            return ApiResponse.error(400, "Duplicated username.");
-        } else if (result == UserRegisterResult.DUPLICATED_EMAIL) {
-            return ApiResponse.error(400, "Duplicated email.");
-        } else if (result == UserRegisterResult.DUPLICATED_PHONE) {
-            return ApiResponse.error(400, "Duplicated phone number.");
-        } else {
-            return ApiResponse.error(500, "Unknown error occurred.");
-        }
+        return createRegisterResponse(result);
+    }
+
+    @GetMapping("/test")
+    public ApiResponse<?> authTest() {
+        return ApiResponse.success(200, "Authentication test successful.");
+    }
+
+    private ApiResponse<?> createRegisterResponse(UserRegisterResult result) {
+        return switch (result) {
+            case SUCCESS -> ApiResponse.success(200, "User registered successfully.");
+            case DUPLICATED_USERNAME -> ApiResponse.error(400, "Duplicated username.");
+            case DUPLICATED_EMAIL -> ApiResponse.error(400, "Duplicated email.");
+            case DUPLICATED_PHONE -> ApiResponse.error(400, "Duplicated phone number.");
+            default -> ApiResponse.error(500, "Unknown error occurred.");
+        };
     }
 }
