@@ -46,6 +46,20 @@ public class PushNotificationService {
         if (subscriptions.isEmpty())
             return;
 
+        sendNotifications(subscriptions, message, now);
+    }
+
+    @Transactional
+    public void sendPushTo(List<Long> userIds, WebPushMessage message, LocalDateTime now) {
+
+        List<PushSubscription> subscriptions = pushSubscriptionRepository.findByUserIdIn(userIds);
+        if (subscriptions.isEmpty())
+            return;
+
+        sendNotifications(subscriptions, message, now);
+    }
+
+    private void sendNotifications(List<PushSubscription> subscriptions, WebPushMessage message, LocalDateTime now) {
         for (PushSubscription subscription : subscriptions) {
             try {
                 Notification notification = new Notification(
@@ -61,10 +75,8 @@ public class PushNotificationService {
                 pushSubscriptionRepository.save(subscription);
             }
             catch (Exception e) {
-                log.info("Failed to send push notification to user {}.", userId, e);
+                log.info("Failed to send push notification to user {}.", subscription.getUserId(), e);
             }
         }
     }
-
-    // TODO sendPushTo userId 리스트 버전 만들기
 }
