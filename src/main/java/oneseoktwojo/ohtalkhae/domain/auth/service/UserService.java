@@ -7,24 +7,24 @@ import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.domain.auth.mapper.UserMapper;
-import oneseoktwojo.ohtalkhae.domain.auth.repository.AuthRepository;
+import oneseoktwojo.ohtalkhae.domain.auth.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class UserService {
 
-    private final AuthRepository authRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public UserRegisterResult register(UserRegisterRequest request) {
-        if (authRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             return UserRegisterResult.DUPLICATED_USERNAME;
-        } else if (authRepository.existsByEmail(request.getEmail())) {
+        } else if (userRepository.existsByEmail(request.getEmail())) {
             return UserRegisterResult.DUPLICATED_EMAIL;
-        } else if (authRepository.existsByPhone(request.getPhone())) {
+        } else if (userRepository.existsByPhone(request.getPhone())) {
             return UserRegisterResult.DUPLICATED_PHONE;
         }
 
@@ -33,7 +33,7 @@ public class AuthService {
         user.setRole(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPoint(0L);
-        authRepository.save(user);
+        userRepository.save(user);
 
         return UserRegisterResult.SUCCESS;
     }
