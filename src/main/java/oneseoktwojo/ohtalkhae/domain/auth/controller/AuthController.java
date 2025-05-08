@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.TokenRefreshRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.TokenResponse;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
-import oneseoktwojo.ohtalkhae.domain.auth.service.AuthService;
+import oneseoktwojo.ohtalkhae.domain.auth.service.UserService;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.domain.auth.service.RefreshTokenService;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final UserService userService;
     private final RefreshTokenService refreshTokenService;
     private final JWTUtil jwtUtil;
 
@@ -28,7 +28,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequest request) {
-        UserRegisterResult result = authService.register(request);
+        UserRegisterResult result = userService.register(request);
         return createRegisterResponse(result);
     }
 

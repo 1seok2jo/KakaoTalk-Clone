@@ -2,6 +2,7 @@ package oneseoktwojo.ohtalkhae.domain.auth;
 
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
+import oneseoktwojo.ohtalkhae.domain.auth.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,10 +11,10 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.jwt.secret=testsetsetsetsetsetsetsetset")
-class AuthServiceTest {
+class UserServiceTest {
 
     @Autowired
-    private AuthService authService;
+    private UserService userService;
 
     @Test
     void register() {
@@ -26,7 +27,7 @@ class AuthServiceTest {
         userRegisterRequest.setBirthday(LocalDate.of(2000, 1, 1));
 
         // When
-        UserRegisterResult result = authService.register(userRegisterRequest);
+        UserRegisterResult result = userService.register(userRegisterRequest);
 
         // Then
         assertEquals(UserRegisterResult.SUCCESS, result);
@@ -43,8 +44,8 @@ class AuthServiceTest {
         userRegisterRequest.setBirthday(LocalDate.of(2000, 1, 1));
 
         // When
-        authService.register(userRegisterRequest);
-        UserRegisterResult result = authService.register(userRegisterRequest);
+        userService.register(userRegisterRequest);
+        UserRegisterResult result = userService.register(userRegisterRequest);
 
         // Then
         assertEquals(UserRegisterResult.DUPLICATED_USERNAME, result);
