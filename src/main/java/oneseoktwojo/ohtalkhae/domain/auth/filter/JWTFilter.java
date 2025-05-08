@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import oneseoktwojo.ohtalkhae.domain.auth.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.CustomUserDetails;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
