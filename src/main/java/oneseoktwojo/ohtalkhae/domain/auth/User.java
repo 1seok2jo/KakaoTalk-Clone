@@ -33,4 +33,8 @@ public class User {
     private Role role;
     @CreatedDate
     private LocalDateTime createdAt;
+
+    //프로필 관련 필드
+    private String nickname;
+    private String profileImagePath;
 }
