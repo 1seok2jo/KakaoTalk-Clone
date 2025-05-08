@@ -1,4 +1,4 @@
-package oneseoktwojo.ohtalkhae.domain.notification.dto;
+package oneseoktwojo.ohtalkhae.domain.notification.dto.request;
 
 import lombok.Builder;
 import lombok.Data;

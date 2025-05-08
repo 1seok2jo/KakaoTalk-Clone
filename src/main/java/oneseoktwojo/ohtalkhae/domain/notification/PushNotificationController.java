@@ -2,10 +2,13 @@ package oneseoktwojo.ohtalkhae.domain.notification;
 
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.RequiredArgsConstructor;
-import oneseoktwojo.ohtalkhae.domain.notification.dto.PushSubscribeRequest;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
+import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +30,12 @@ public class PushNotificationController {
     @PostMapping("/unsubscribe")
     public void unsubscribe(@RequestBody PushSubscribeRequest request) {
         pushNotificationService.unsubscribe(request);
+    }
+
+    @GetMapping("/devices")
+    public ApiResponse<List<DeviceListResponse>> getSubscribedDevices(@RequestParam Long userId) {
+        List<DeviceListResponse> subscribedDevices = pushNotificationService.getSubscribedDevices(userId);
+        return ApiResponse.success(200, subscribedDevices);
     }
 
     private String parseDeviceName(String userAgentString) {

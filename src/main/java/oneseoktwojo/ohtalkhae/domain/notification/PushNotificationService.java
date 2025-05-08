@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
-import oneseoktwojo.ohtalkhae.domain.notification.dto.PushSubscribeRequest;
+import oneseoktwojo.ohtalkhae.domain.auth.User;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.WebPushMessage;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
 import oneseoktwojo.ohtalkhae.domain.notification.mapper.PushSubscriptionMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,14 @@ public class PushNotificationService {
         Optional<PushSubscription> subscriptionOptional =
                 pushSubscriptionRepository.findByEndPoint(request.getEndPoint());
         subscriptionOptional.ifPresent(pushSubscriptionRepository::delete);
+    }
+
+    public List<DeviceListResponse> getSubscribedDevices(Long userId) {
+        List<PushSubscription> subscriptions = pushSubscriptionRepository.findByUserId(userId);
+
+        return subscriptions.stream()
+                .map(s -> DeviceListResponse.of(s))
+                .toList();
     }
 
     @Transactional
