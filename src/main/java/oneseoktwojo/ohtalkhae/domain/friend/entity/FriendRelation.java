@@ -28,7 +28,7 @@ public class FriendRelation {
     private User requester;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requester_id", nullable = false)
+    @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
     @Enumerated(EnumType.STRING)  // Enum을 문자로 저장
