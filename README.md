@@ -30,9 +30,9 @@
 
 - 📄 [Notion 문서 바로가기](https://www.notion.so/goormkdx/1d6c0ff4ce3180ac972ef5d7a86f6365?pvs=4)
 - 🗂️ [DB 다이어그램](https://dbdiagram.io/d/talk-67ff50c99cea640381e51a50)
+- 📱 [우창님 제작 UI](https://github.com/user-attachments/files/20079418/0507.wireframe.pdf)
 
 ---
 
 ## 🖼️ ERD 이미지
-
 ![ERD 이미지](https://github.com/user-attachments/assets/0b1e1b56-dbb4-4a33-97ac-88a109f4d339)
