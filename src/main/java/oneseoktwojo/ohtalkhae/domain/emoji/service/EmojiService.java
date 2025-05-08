@@ -6,11 +6,15 @@ import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiDetailResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiListResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiPurchaseCheckResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiRegisterResponse;
+import oneseoktwojo.ohtalkhae.domain.emoji.entity.Emoji;
+import oneseoktwojo.ohtalkhae.domain.emoji.entity.EmojiImage;
 import oneseoktwojo.ohtalkhae.domain.emoji.repository.EmojiImageRepository;
 import oneseoktwojo.ohtalkhae.domain.emoji.repository.EmojiRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +24,44 @@ public class EmojiService {
     private final EmojiImageRepository emojiImageRepository;
 
     public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request, String sellerName) {
-        // TODO: 이모티콘 등록 로직 구현
-        return new EmojiRegisterResponse();
+        // 1. Emoji 엔티티 생성 및 저장
+        Emoji emoji = new Emoji(
+                request.getEmojiName(),
+                request.getEmojiPrice(),
+                request.getMainEmojiUrl(),
+                sellerName
+        );
+        emojiRepository.save(emoji);
+
+        // 2. EmojiImage 리스트 생성 및 저장
+        List<EmojiImage> images = new ArrayList<>();
+        List<String> emojiUrls = request.getEmojiUrls();
+        for (int i = 0; i < emojiUrls.size(); i++) {
+            String imageUrl = emojiUrls.get(i);
+            EmojiImage image = new EmojiImage(imageUrl, i + 1, emoji);
+            images.add(image);
+        }
+        emojiImageRepository.saveAll(images);
+
+        // 3. 응답 객체 생성
+        String detailPageUrl = "/emojis/" + emoji.getId();
+        return new EmojiRegisterResponse(
+                emoji.getId(),
+                emoji.getEmojiName(),
+                detailPageUrl
+        );
     }
 
     public List<EmojiListResponse> getAllEmojis() {
-        // TODO: 전체 이모티콘 목록 조회 로직
-        return List.of();
+        return emojiRepository.findAll().stream()
+                .map(emoji -> new EmojiListResponse(
+                        emoji.getId(),
+                        emoji.getEmojiName(),
+                        emoji.getEmojiPrice(),
+                        emoji.getMainEmojiUrl(),
+                        emoji.getSellerName()
+                ))
+                .collect(Collectors.toList());
     }
 
     public List<EmojiListResponse> getPopularEmojis() {
