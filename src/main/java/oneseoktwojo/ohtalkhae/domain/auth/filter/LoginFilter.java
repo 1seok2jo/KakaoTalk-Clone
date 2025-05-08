@@ -73,7 +73,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse(null);
-        String token = jwtUtil.createJwt(username, role, accessTokenExpirationTime); // 1 hour expiration time
+        String token = jwtUtil.createJwt(username, role, accessTokenExpirationTime); // Expiration time is configurable via the accessTokenExpirationTime property
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(username);
 
         response.setStatus(HttpServletResponse.SC_OK);
