@@ -1,6 +1,6 @@
 package oneseoktwojo.ohtalkhae.domain.auth.mapper;
 
-import oneseoktwojo.ohtalkhae.domain.auth.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

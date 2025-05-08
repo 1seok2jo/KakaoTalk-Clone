@@ -1,11 +1,13 @@
-package oneseoktwojo.ohtalkhae.domain.auth;
+package oneseoktwojo.ohtalkhae.domain.auth.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserRegisterRequest;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.domain.auth.mapper.UserMapper;
+import oneseoktwojo.ohtalkhae.domain.auth.repository.AuthRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

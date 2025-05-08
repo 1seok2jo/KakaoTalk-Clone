@@ -1,7 +1,9 @@
-package oneseoktwojo.ohtalkhae.domain.auth;
+package oneseoktwojo.ohtalkhae.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.CustomUserDetails;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
+import oneseoktwojo.ohtalkhae.domain.auth.repository.AuthRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
