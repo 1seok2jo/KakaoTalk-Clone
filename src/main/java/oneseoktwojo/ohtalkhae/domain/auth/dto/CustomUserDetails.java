@@ -1,7 +1,7 @@
 package oneseoktwojo.ohtalkhae.domain.auth.dto;
 
 import lombok.RequiredArgsConstructor;
-import oneseoktwojo.ohtalkhae.domain.auth.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.filter.JWTFilter;
 import oneseoktwojo.ohtalkhae.domain.auth.filter.LoginFilter;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
+import oneseoktwojo.ohtalkhae.domain.auth.service.RefreshTokenService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
+    @Value("${spring.jwt.access-token-expiration-time}")
+    private Long accessTokenExpirationTime; // 1 hour
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -48,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/notification/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(accessTokenExpirationTime, authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();

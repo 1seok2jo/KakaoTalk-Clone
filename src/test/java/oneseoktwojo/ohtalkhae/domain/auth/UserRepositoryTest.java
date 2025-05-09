@@ -1,6 +1,8 @@
 package oneseoktwojo.ohtalkhae.domain.auth;
 
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
+import oneseoktwojo.ohtalkhae.domain.auth.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,9 +12,9 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.jwt.secret=testsetsetsetsetsetsetsetset")
-class AuthRepositoryTest {
+class UserRepositoryTest {
     @Autowired
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Test
     void existsByUsername() {
@@ -28,16 +30,16 @@ class AuthRepositoryTest {
                 0L,
                 Role.ROLE_USER,
                 null);
-        authRepository.save(user);
+        userRepository.save(user);
 
         // When
-        Boolean exists = authRepository.existsByUsername(username);
+        Boolean exists = userRepository.existsByUsername(username);
 
         // Then
         assertTrue(exists);
 
         // Clean up
-        authRepository.delete(user);
+        userRepository.delete(user);
     }
 
     @Test
@@ -55,16 +57,16 @@ class AuthRepositoryTest {
                 Role.ROLE_USER,
                 null);
 
-        authRepository.save(user);
+        userRepository.save(user);
 
         // When
-        Boolean exists = authRepository.existsByEmail(email);
+        Boolean exists = userRepository.existsByEmail(email);
 
         // Then
         assertTrue(exists);
 
         // Clean up
-        authRepository.delete(user);
+        userRepository.delete(user);
     }
 
     @Test
@@ -82,15 +84,15 @@ class AuthRepositoryTest {
                 Role.ROLE_USER,
                 null);
 
-        authRepository.save(user);
+        userRepository.save(user);
         // When
-        Boolean exists = authRepository.existsByPhone(phone);
+        Boolean exists = userRepository.existsByPhone(phone);
 
         // Then
         assertTrue(exists);
 
         // Clean up
-        authRepository.delete(user);
+        userRepository.delete(user);
     }
 
     @Test
@@ -107,15 +109,15 @@ class AuthRepositoryTest {
                 0L,
                 Role.ROLE_USER,
                 null);
-        authRepository.save(user);
+        userRepository.save(user);
 
         // When
-        User foundUser = authRepository.findByUsername(username);
+        User foundUser = userRepository.findByUsername(username);
 
         // Then
         assertNotNull(foundUser);
 
         // Clean up
-        authRepository.delete(user);
+        userRepository.delete(user);
     }
 }

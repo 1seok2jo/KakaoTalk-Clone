@@ -6,6 +6,8 @@ spring:
       add-mappings: false
   jwt:
     secret: ${JWT_SECRET}
+    refresh-token-expiration-time: 43200000
+    access-token-expiration-time: 3600000
   datasource:
     url: jdbc:h2:mem:ohtalkhae
     driver-class-name: org.h2.Driver
@@ -24,6 +26,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  file:
+    upload:
+      path: ./upload/profile/
 
 webpush:
   public-key: BBtyefD63XsMWfBgtJtzZ-Elh9lt3P68G6oKMoJMDUsjNAOEQjqvxOV-OgDYJuLWlIAc8YaQ2TCkzn2bkiIhDO0=

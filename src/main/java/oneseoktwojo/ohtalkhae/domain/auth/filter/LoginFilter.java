@@ -4,10 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.CustomUserDetails;
+import oneseoktwojo.ohtalkhae.domain.auth.dto.TokenResponse;
 import oneseoktwojo.ohtalkhae.domain.auth.dto.UserLoginRequest;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.RefreshToken;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
+import oneseoktwojo.ohtalkhae.domain.auth.service.RefreshTokenService;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,11 +23,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.Collection;
 
+@RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    private final RefreshTokenService refreshTokenService;
+
+    private Long accessTokenExpirationTime;
+
+    public LoginFilter(@Value("${spring.jwt.access-token-expiration-time}") Long accessTokenExpirationTime, AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshTokenService refreshTokenService) {
         super(authenticationManager);
         this.jwtUtil = jwtUtil;
+        this.refreshTokenService = refreshTokenService;
+        this.accessTokenExpirationTime = accessTokenExpirationTime;
         // Set the URL to which the filter will respond
         setFilterProcessesUrl("/auth/login");
     }
@@ -61,14 +73,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse(null);
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 1000L); // 1 hour expiration time
+        String token = jwtUtil.createJwt(username, role, accessTokenExpirationTime); // Expiration time is configurable via the accessTokenExpirationTime property
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(username);
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setHeader("Authorization", "Bearer " + token);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(
-                ApiResponse.success(200, token)
+                ApiResponse.success(200, new TokenResponse(token, refreshToken.getToken()))
         ));
     }
 
