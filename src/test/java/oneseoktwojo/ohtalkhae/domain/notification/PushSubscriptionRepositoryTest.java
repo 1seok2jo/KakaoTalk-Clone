@@ -43,6 +43,33 @@ class PushSubscriptionRepositoryTest extends IntegrationTestSupport {
                 .containsExactly(tuple(userId1, endPoint1));
     }
 
+    @DisplayName("userId 리스트를 이용하여 푸시 알림 구독 목록을 조회합니다.")
+    @Test
+    void findByUserIdIn() {
+        // given
+        Long userId1 = 1L;
+        Long userId2 = 2L;
+        Long userId3 = 3L;
+        String endPoint1 = "https://fcm.googleapis.com/fcm/send/cx1Ykq8bSxE:APA91bF3YX98k0p-EXAMPLE_END_POINT_USER1";
+        String endPoint2 = "https://fcm.googleapis.com/fcm/send/cx1Ykq8bSxE:APA91bF3YX98k0p-EXAMPLE_END_POINT_USER2";
+        String endPoint3 = "https://fcm.googleapis.com/fcm/send/cx1Ykq8bSxE:APA91bF3YX98k0p-EXAMPLE_END_POINT_USER3";
+
+        pushSubscriptionRepository.save(createPushSubscription(userId1, endPoint1));
+        pushSubscriptionRepository.save(createPushSubscription(userId2, endPoint2));
+        pushSubscriptionRepository.save(createPushSubscription(userId3, endPoint3));
+
+        // when
+        List<PushSubscription> found = pushSubscriptionRepository.findByUserIdIn(List.of(1L, 3L));
+
+        // then
+        assertThat(found).hasSize(2)
+                .extracting("userId", "endPoint")
+                .containsExactlyInAnyOrder(
+                        tuple(userId1, endPoint1),
+                        tuple(userId3, endPoint3)
+                );
+    }
+
     @DisplayName("endPoint를 이용하여 푸시 알림 구독 목록을 조회합니다.")
     @Test
     void findByEndPoint() {

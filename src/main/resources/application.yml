@@ -26,6 +26,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  file:
-    upload:
-      path: ./upload/profile/
+        
+file:
+  upload:
+    path: ./upload/profile/
+
+webpush:
+  public-key: ${PUSH_PUBLIC_KEY}
+  private-key: ${PUSH_PRIVATE_KEY}

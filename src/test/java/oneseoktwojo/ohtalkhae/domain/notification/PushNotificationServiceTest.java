@@ -1,13 +1,15 @@
 package oneseoktwojo.ohtalkhae.domain.notification;
 
 import oneseoktwojo.ohtalkhae.IntegrationTestSupport;
-import oneseoktwojo.ohtalkhae.domain.notification.dto.PushSubscribeRequest;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,6 +71,23 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
 
         // when then
         pushNotificationService.unsubscribe(request);
+    }
+
+    @DisplayName("구독 중인 장치 목록을 조회합니다.")
+    @Test
+    void getSubscribedDevices() {
+        // given
+        Long userId = 1L;
+        String endPoint = "https://fcm.googleapis.com/fcm/send/cx1Ykq8bSxE:APA91bF3YX98k0p-EXAMPLE_END_POINT";
+        PushSubscribeRequest request = createPushSubscribeRequest(userId, endPoint);
+        PushSubscription saved = pushNotificationService.subscribe(request);
+
+        // when
+        List<DeviceListResponse> devices = pushNotificationService.getSubscribedDevices(userId);
+
+        // then
+        assertThat(devices).hasSize(1);
+        assertThat(devices.get(0).getSubscriptionId()).isEqualTo(saved.getSubscriptionId());
     }
 
     private PushSubscribeRequest createPushSubscribeRequest(Long userId, String endPoint) {
