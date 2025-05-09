@@ -1,4 +1,4 @@
-package oneseoktwojo.ohtalkhae.domain.profile;
+package oneseoktwojo.ohtalkhae.domain.profile.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import oneseoktwojo.ohtalkhae.domain.auth.AuthRepository;
+import oneseoktwojo.ohtalkhae.domain.auth.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ public class UserProfileService {
     @Value("${file.upload.path}")
     private String uploadPath;
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
 
     public String uploadProfileImage(Long userId, MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
@@ -34,10 +36,10 @@ public class UserProfileService {
 
         Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-        User user = userRepository.findById(userId)
+        User user = authRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID: " + userId));
         user.setProfileImagePath(newFilename);
-        userRepository.save(user);
+        authRepository.save(user);
 
         return newFilename;
     }

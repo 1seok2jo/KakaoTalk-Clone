@@ -1,7 +1,7 @@
-package oneseoktwojo.ohtalkhae.domain.profile;
+package oneseoktwojo.ohtalkhae.domain.profile.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import oneseoktwojo.ohtalkhae.domain.profile.service.UserProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
