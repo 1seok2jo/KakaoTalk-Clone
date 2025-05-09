@@ -21,7 +21,8 @@ public class EmojiService {
 
     public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request, String sellerName) {
         // TODO: 이모티콘 등록 로직 구현
-        return new EmojiRegisterResponse();
+//        return new EmojiRegisterResponse();
+        return null;
     }
 
     public List<EmojiListResponse> getAllEmojis() {
@@ -56,7 +57,8 @@ public class EmojiService {
 
     public EmojiDetailResponse getEmojiDetail(Long emojiId) {
         // TODO: 이모티콘 상세 정보 조회 로직
-        return new EmojiDetailResponse();
+//        return new EmojiDetailResponse();
+        return null;
     }
 
     public void addBookmark(String userId, Long emojiId) {
@@ -73,6 +75,7 @@ public class EmojiService {
 
     public EmojiPurchaseCheckResponse checkPurchase(String userId, Long emojiId) {
         // TODO: 이모티콘 구매 여부 확인 로직
-        return new EmojiPurchaseCheckResponse();
+//        return new EmojiPurchaseCheckResponse();
+        return null;
     }
 }
