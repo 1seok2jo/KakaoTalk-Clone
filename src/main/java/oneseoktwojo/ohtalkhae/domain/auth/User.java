@@ -1,10 +1,7 @@
-package oneseoktwojo.ohtalkhae.domain.auth;
+package oneseoktwojo.ohtalkhae.domain.auth.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import oneseoktwojo.ohtalkhae.domain.auth.enums.Role;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
+@Builder
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,5 +31,4 @@ public class User {
     private Role role;
     @CreatedDate
     private LocalDateTime createdAt;
-    
 }
