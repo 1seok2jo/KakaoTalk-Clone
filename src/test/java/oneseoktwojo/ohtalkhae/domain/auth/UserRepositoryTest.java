@@ -20,16 +20,17 @@ class UserRepositoryTest {
     void existsByUsername() {
         // Given
         String username = "testuser";
-        User user = new User(
-                null,
-                username,
-                "testpassword",
-                "000-0000-0000",
-                "test@test.com",
-                LocalDate.now(),
-                0L,
-                Role.ROLE_USER,
-                null);
+
+        User user = User.builder()
+                        .username(username)
+                        .password("testpassword")
+                        .phone("000-0000-0000")
+                        .email("test@test.com")
+                        .birthday(LocalDate.now())
+                        .point(0L)
+                        .role(Role.ROLE_USER)
+                        .build();
+
         userRepository.save(user);
 
         // When
@@ -46,16 +47,16 @@ class UserRepositoryTest {
     void existsByEmail() {
         // Given
         String email = "test@test.com";
-        User user = new User(
-                null,
-                "testuser",
-                "testpassword",
-                "000-0000-0000",
-                email,
-                LocalDate.now(),
-                0L,
-                Role.ROLE_USER,
-                null);
+
+        User user = User.builder()
+                .username("testuser")
+                .password("testpassword")
+                .phone("000-0000-0000")
+                .email(email)
+                .birthday(LocalDate.now())
+                .point(0L)
+                .role(Role.ROLE_USER)
+                .build();
 
         userRepository.save(user);
 
@@ -73,16 +74,16 @@ class UserRepositoryTest {
     void existsByPhone() {
         // Given
         String phone = "000-0000-0000";
-        User user = new User(
-                null,
-                "testuser",
-                "testpassword",
-                phone,
-                "test@test.com",
-                LocalDate.now(),
-                0L,
-                Role.ROLE_USER,
-                null);
+
+        User user = User.builder()
+                .username("testuser")
+                .password("testpassword")
+                .phone(phone)
+                .email("test@testcom")
+                .birthday(LocalDate.now())
+                .point(0L)
+                .role(Role.ROLE_USER)
+                .build();
 
         userRepository.save(user);
         // When
@@ -99,16 +100,15 @@ class UserRepositoryTest {
     void findByUsername() {
         // Given
         String username = "testuser";
-        User user = new User(
-                null,
-                username,
-                "testpassword",
-                "000-0000-0000",
-                "test@test.com",
-                LocalDate.now(),
-                0L,
-                Role.ROLE_USER,
-                null);
+        User user = User.builder()
+                .username(username)
+                .password("testpassword")
+                .phone("000-0000-0000")
+                .email("test@testcom")
+                .birthday(LocalDate.now())
+                .point(0L)
+                .role(Role.ROLE_USER)
+                .build();
         userRepository.save(user);
 
         // When
