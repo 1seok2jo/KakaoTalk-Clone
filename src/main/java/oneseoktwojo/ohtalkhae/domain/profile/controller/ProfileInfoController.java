@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users/{userId}/profile")
+@RequestMapping("/api/users/{userId}/profile/info")
 public class ProfileInfoController {
 
     private final ProfileInfoService profileInfoService;
 
     @PutMapping("/nickname")
-    public ResponseEntity<String> updateNickname(@PathVariable Long userId, @Valid @RequestBody NicknameUpdateRequest request){
+    public ResponseEntity<String> updateNickname(
+            @PathVariable Long userId,
+            @Valid @RequestBody NicknameUpdateRequest request) {
         profileInfoService.updateNickname(userId, request.getNickname());
         return ResponseEntity.ok("닉네임이 성공적으로 변경되었습니다.");
     }

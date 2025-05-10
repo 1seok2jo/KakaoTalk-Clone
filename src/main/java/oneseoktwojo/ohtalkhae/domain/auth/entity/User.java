@@ -31,4 +31,6 @@ public class User {
     private Role role;
     @CreatedDate
     private LocalDateTime createdAt;
+    private String nickname;
+    private String profileImagePath;
 }
