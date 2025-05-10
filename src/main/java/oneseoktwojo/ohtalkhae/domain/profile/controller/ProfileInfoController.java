@@ -21,4 +21,12 @@ public class ProfileInfoController {
         profileInfoService.updateNickname(userId, request.getNickname());
         return ResponseEntity.ok("닉네임이 성공적으로 변경되었습니다.");
     }
+
+    @PutMapping("/status-message")
+    public ResponseEntity<String> updateStatusMessage(
+            @PathVariable Long userId,
+            @Valid @RequestBody StatusMessageUpdateRequest request) {
+        profileInfoService.updateStatusMessage(userId, request.getStatusMessage());
+        return ResponseEntity.ok("상태 메시지가 성공적으로 변경되었습니다.");
+    }
 }

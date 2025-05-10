@@ -23,4 +23,11 @@ public class ProfileInfoService {
         user.setNickname(newNickname);
         userRepository.save(user);
     }
+
+    public void updateStatusMessage(Long userId, String newStatusMessage) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID: " + userId));
+        user.setStatusMessage(newStatusMessage);
+        userRepository.save(user);
+    }
 }
