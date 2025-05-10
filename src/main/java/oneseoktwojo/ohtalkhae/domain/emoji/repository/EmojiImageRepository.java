@@ -1,4 +1,4 @@
-package oneseoktwojo.ohtalkhae.domain.emoji.repository.;
+package oneseoktwojo.ohtalkhae.domain.emoji.repository;
 
 import oneseoktwojo.ohtalkhae.domain.emoji.entity.EmojiImage;
 import org.springframework.data.jpa.repository.JpaRepository;

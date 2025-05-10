@@ -10,13 +10,15 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users/{userId}/profile")
+@RequestMapping("/api/users/{userId}/profile/image")
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-    @PostMapping("/image")
-    public ResponseEntity<String> uploadProfileImage(@PathVariable Long userId, @RequestParam("image") MultipartFile file) throws IOException {
+    @PostMapping
+    public ResponseEntity<String> uploadProfileImage(
+            @PathVariable Long userId,
+            @RequestParam("image") MultipartFile file) throws IOException {
         String uploadedFileName = userProfileService.uploadProfileImage(userId, file);
         return ResponseEntity.ok("프로필 사진이 성공적으로 업로드되었습니다. 파일 이름: " + uploadedFileName);
     }
