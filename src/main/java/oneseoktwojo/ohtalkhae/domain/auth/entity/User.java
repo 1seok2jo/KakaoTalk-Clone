@@ -33,4 +33,5 @@ public class User {
     private LocalDateTime createdAt;
     private String nickname;
     private String profileImagePath;
+    private String statusMessage;
 }

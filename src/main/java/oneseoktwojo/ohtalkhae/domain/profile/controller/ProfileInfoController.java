@@ -3,6 +3,8 @@ package oneseoktwojo.ohtalkhae.domain.profile.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.profile.dto.NicknameUpdateRequest;
+import oneseoktwojo.ohtalkhae.domain.profile.dto.ProfileResponse;
+import oneseoktwojo.ohtalkhae.domain.profile.dto.StatusMessageUpdateRequest;
 import oneseoktwojo.ohtalkhae.domain.profile.service.ProfileInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +30,11 @@ public class ProfileInfoController {
             @Valid @RequestBody StatusMessageUpdateRequest request) {
         profileInfoService.updateStatusMessage(userId, request.getStatusMessage());
         return ResponseEntity.ok("상태 메시지가 성공적으로 변경되었습니다.");
+    }
+
+    @GetMapping
+    public ResponseEntity<ProfileResponse> getProfileInfo(@PathVariable Long userId){
+        ProfileResponse profileResponse = profileInfoService.getProfileInfo(userId);
+        return ResponseEntity.ok(profileResponse);
     }
 }
