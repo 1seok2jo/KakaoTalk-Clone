@@ -2,6 +2,7 @@ package oneseoktwojo.ohtalkhae;
 
 import oneseoktwojo.ohtalkhae.config.SecurityConfig;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
+import oneseoktwojo.ohtalkhae.domain.auth.service.RefreshTokenService;
 import oneseoktwojo.ohtalkhae.domain.notification.PushNotificationController;
 import oneseoktwojo.ohtalkhae.domain.notification.PushNotificationService;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +17,9 @@ public class ControllerTestSupport {
 
     @MockitoBean
     private PushNotificationService pushNotificationService;
+
+    @MockitoBean
+    private RefreshTokenService refreshTokenService;
 
     @MockitoBean
     private JWTUtil jwtUtil;

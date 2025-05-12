@@ -6,10 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.chat.enums.MessageType;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.common.BaseTimeEntity;
-import oneseoktwojo.ohtalkhae.domain.user.User;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class Message extends BaseTimeEntity {
     @JoinColumn(name = "sender_id")
     private User sender;
     
-    @Lob
+    @Column(length = 50000)
     private String content;
     
     @Enumerated(EnumType.STRING)
