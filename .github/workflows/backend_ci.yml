@@ -18,6 +18,10 @@ jobs:
       - name: 레포지토리를 가져옵니다
         uses: actions/checkout@v4
 
+      - name: application-local.yml 파일을 디코딩 합니다.
+        run: |
+          echo ${{secrets.APPLICATION_LOCAL_YML}} | base64 --decode > ./src/main/resources/application-local.yml
+
       - name: JDK 17를 설치합니다
         uses: actions/setup-java@v4
         with:
