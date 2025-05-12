@@ -5,6 +5,8 @@
     import java.nio.file.Path;
     import java.nio.file.Paths;
     import java.nio.file.StandardCopyOption;
+    import java.util.Arrays;
+    import java.util.List;
     import java.util.UUID;
     import lombok.RequiredArgsConstructor;
     import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
@@ -30,7 +32,13 @@
             }
 
             String originalFilename = file.getOriginalFilename();
-            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+
+            List<String> allowedExtensions = Arrays.asList(".jpg", ".jpeg", ".png", ".gif");
+            if (!allowedExtensions.contains(fileExtension)) {
+                throw new IllegalArgumentException("허용되지 않은 파일 확장자입니다. : " + fileExtension);
+            }
+
             String newFilename = UUID.randomUUID().toString() + fileExtension;
             Path targetPath = Paths.get(uploadPath, newFilename);
 
