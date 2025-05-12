@@ -5,7 +5,7 @@ import oneseoktwojo.ohtalkhae.domain.chat.dto.response.ChatRoomDto;
 import oneseoktwojo.ohtalkhae.domain.chat.dto.response.ChatRoomResponse;
 import oneseoktwojo.ohtalkhae.domain.chat.dto.request.CreateChatRoomRequest;
 import oneseoktwojo.ohtalkhae.domain.chat.service.ChatRoomService;
-import oneseoktwojo.ohtalkhae.domain.user.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
