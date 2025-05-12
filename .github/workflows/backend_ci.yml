@@ -18,9 +18,19 @@ jobs:
       - name: 레포지토리를 가져옵니다
         uses: actions/checkout@v4
 
-      - name: application-local.yml 파일을 디코딩 합니다.
+      - name: application-local.yml 파일을 생성합니다.
         run: |
           echo ${{secrets.APPLICATION_LOCAL_YML}} | base64 --decode > ./src/main/resources/application-local.yml
+      
+      - name: Secret의 환경 변수를 가져옵니다.
+        run: |
+          echo "JWT_SECRET=$JWT_SECRET" >> .env
+          echo "PUSH_PRIVATE_KEY=$PUSH_PRIVATE_KEY" >> .env
+          echo "PUSH_PUBLIC_KEY=$PUSH_PUBLIC_KEY" >> .env
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PUSH_PRIVATE_KEY: ${{ secrets.PUSH_PRIVATE_KEY }}
+          PUSH_PUBLIC_KEY: ${{ secrets.PUSH_PUBLIC_KEY }}
 
       - name: JDK 17를 설치합니다
         uses: actions/setup-java@v4
