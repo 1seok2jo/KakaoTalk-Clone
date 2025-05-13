@@ -48,7 +48,7 @@ public class ChatMapper {
             .chatRoomId(message.getChatRoom().getChatRoomId())
             .senderId(message.getSender().getUserId())
             .senderNickname(message.getSender().getUsername())
-            .senderProfileUrl(message.getSender().getProfileImageUrl())
+//            .senderProfileUrl(message.getSender().getProfileImageUrl()) TODO User 클래스에 해당 메서드가 없어 임시로 주석 처리했습니다.
             .content(message.getContent())
             .type(message.getType())
             .isDeleted(message.isDeleted())

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.chat.dto.response.MessageDto;
 import oneseoktwojo.ohtalkhae.domain.chat.dto.request.MessageRequest;
 import oneseoktwojo.ohtalkhae.domain.chat.service.MessageService;
-import oneseoktwojo.ohtalkhae.domain.user.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

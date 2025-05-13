@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
-import oneseoktwojo.ohtalkhae.domain.auth.User;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.WebPushMessage;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;

@@ -7,10 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import oneseoktwojo.ohtalkhae.domain.chat.enums.Role;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.common.BaseTimeEntity;
-import oneseoktwojo.ohtalkhae.domain.user.User;
-
-import java.time.LocalDateTime;
 
 /**
  * 채팅방 멤버 엔티티 클래스

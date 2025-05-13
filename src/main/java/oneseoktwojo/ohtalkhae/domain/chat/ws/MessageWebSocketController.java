@@ -5,7 +5,7 @@ import oneseoktwojo.ohtalkhae.domain.chat.dto.response.MessageDto;
 import oneseoktwojo.ohtalkhae.domain.chat.dto.request.MessageRequest;
 import oneseoktwojo.ohtalkhae.domain.chat.enums.MessageType;
 import oneseoktwojo.ohtalkhae.domain.chat.service.MessageService;
-import oneseoktwojo.ohtalkhae.domain.user.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;

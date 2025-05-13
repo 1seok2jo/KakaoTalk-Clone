@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.friend.enums.FriendStatus;
-import oneseoktwojo.ohtalkhae.domain.profile.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

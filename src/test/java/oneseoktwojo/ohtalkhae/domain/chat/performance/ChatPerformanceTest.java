@@ -7,7 +7,7 @@ import oneseoktwojo.ohtalkhae.domain.chat.dto.response.ChatRoomResponse;
 import oneseoktwojo.ohtalkhae.domain.chat.dto.response.MessageDto;
 import oneseoktwojo.ohtalkhae.domain.chat.enums.ChatRoomType;
 import oneseoktwojo.ohtalkhae.domain.chat.enums.MessageType;
-import oneseoktwojo.ohtalkhae.domain.user.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.junit.jupiter.api.*;
 
 import java.io.BufferedWriter;

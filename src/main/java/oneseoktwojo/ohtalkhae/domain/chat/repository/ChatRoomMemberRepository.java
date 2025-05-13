@@ -2,7 +2,7 @@ package oneseoktwojo.ohtalkhae.domain.chat.repository;
 
 import oneseoktwojo.ohtalkhae.domain.chat.entity.ChatRoom;
 import oneseoktwojo.ohtalkhae.domain.chat.entity.ChatRoomMember;
-import oneseoktwojo.ohtalkhae.domain.user.User;
+import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

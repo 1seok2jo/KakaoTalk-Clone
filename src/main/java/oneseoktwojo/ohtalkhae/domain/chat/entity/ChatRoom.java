@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.chat.enums.ChatRoomType;
 import oneseoktwojo.ohtalkhae.domain.common.BaseTimeEntity;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
