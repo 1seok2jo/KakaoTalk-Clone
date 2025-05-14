@@ -4,6 +4,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.response.NotificationListResponse;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,11 @@ public class NotificationController {
     public ApiResponse<List<DeviceListResponse>> getSubscribedDevices(@RequestParam Long userId) {
         List<DeviceListResponse> subscribedDevices = notificationService.getSubscribedDevices(userId);
         return ApiResponse.success(200, subscribedDevices);
+    }
+
+    @GetMapping("/")
+    public ApiResponse<List<NotificationListResponse>> getNotificationList(@RequestParam Long userId) {
+        return ApiResponse.success(200, notificationService.listNotifications(userId));
     }
 
     private String parseDeviceName(String userAgentString) {

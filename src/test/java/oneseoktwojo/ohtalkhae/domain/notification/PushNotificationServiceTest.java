@@ -5,6 +5,7 @@ import oneseoktwojo.ohtalkhae.IntegrationTestSupport;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.WebPushMessage;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.response.NotificationListResponse;
 import org.jose4j.lang.JoseException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -110,11 +111,7 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
         Long userId = 1L;
         LocalDateTime now = LocalDateTime.now();
         String title = "채팅방 이름";
-        WebPushMessage message = WebPushMessage.builder()
-                .title(title)
-                .body("새 메시지")
-                .clickTarget("https://test.com")
-                .build();
+        WebPushMessage message = createPushMessage(title, "새 메시지");
 
         // when
         notificationService.sendPushTo(userId, message, now);
@@ -134,15 +131,11 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
         Long userId = 1L;
         LocalDateTime beforeNow = LocalDateTime.now().minusMinutes(5);
         String title = "채팅방 이름";
-        WebPushMessage message = WebPushMessage.builder()
-                .title(title)
-                .body("새 메시지")
-                .clickTarget("https://test.com")
-                .build();
+        WebPushMessage message = createPushMessage(title, "새 메시지");
         notificationService.sendPushTo(userId, message, beforeNow);
 
         LocalDateTime now = LocalDateTime.now();
-        message.setBody("추가 메시지");
+        message = createPushMessage(title, "추가 메시지");
 
         // when
         notificationService.sendPushTo(userId, message, now);
@@ -155,6 +148,20 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
         assertThat(log.getCreatedAt().truncatedTo(ChronoUnit.MILLIS)).isEqualTo(now.truncatedTo(ChronoUnit.MILLIS));
     }
 
+    @DisplayName("알림 목록을 조회합니다.")
+    @Test
+    void listNotifications() {
+        // given
+        WebPushMessage message = createPushMessage("채팅방 이름", "새 메시지");
+        notificationService.sendPushTo(1L, message, LocalDateTime.now());
+
+        // when
+        List<NotificationListResponse> result = notificationService.listNotifications(1L);
+
+        // then
+        assertThat(result).hasSize(1);
+    }
+
     private PushSubscribeRequest createPushSubscribeRequest(Long userId, String endPoint) {
         return PushSubscribeRequest.builder()
                 .userId(userId)
@@ -163,6 +170,14 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
                 .auth("m2s7GdXEXAMPLE_AUTH")
                 .deviceName("Chrome on Windows")
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    private WebPushMessage createPushMessage(String title, String message) {
+        return WebPushMessage.builder()
+                .title(title)
+                .body(message)
+                .clickTarget("https://test.com")
                 .build();
     }
 }

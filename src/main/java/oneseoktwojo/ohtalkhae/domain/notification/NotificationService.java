@@ -7,7 +7,9 @@ import nl.martijndwars.webpush.PushService;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeRequest;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.WebPushMessage;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
+import oneseoktwojo.ohtalkhae.domain.notification.dto.response.NotificationListResponse;
 import oneseoktwojo.ohtalkhae.domain.notification.enums.NotificationType;
+import oneseoktwojo.ohtalkhae.domain.notification.mapper.NotificationMapper;
 import oneseoktwojo.ohtalkhae.domain.notification.mapper.PushSubscriptionMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class NotificationService {
     private final PushSubscriptionMapper pushSubscriptionMapper;
     private final PushService pushService;
     private final ObjectMapper objectMapper;
+    private final NotificationMapper notificationMapper;
 
     @Transactional
     public PushSubscription subscribe(PushSubscribeRequest request) {
@@ -105,6 +108,20 @@ public class NotificationService {
                             .build()
             );
         }
+    }
+
+
+    /**
+     * 알림 목록을 생성일시 내림차순으로 조회합니다.
+     * @param userId 회원 ID
+     * @return List<NotificationListResponse>
+     */
+    public List<NotificationListResponse> listNotifications(Long userId) {
+        List<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(userId);
+
+        return notifications.stream()
+                .map(n -> notificationMapper.toNotificationListResponse(n))
+                .toList();
     }
 
     private void sendNotifications(List<PushSubscription> subscriptions, WebPushMessage message, LocalDateTime now) {
