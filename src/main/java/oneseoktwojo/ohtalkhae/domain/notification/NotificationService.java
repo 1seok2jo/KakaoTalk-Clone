@@ -117,7 +117,7 @@ public class NotificationService {
      * @return List<NotificationListResponse>
      */
     public List<NotificationListResponse> listNotifications(Long userId) {
-        List<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(userId);
+        List<Notification> notifications = notificationRepository.findByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(userId);
 
         return notifications.stream()
                 .map(n -> notificationMapper.toNotificationListResponse(n))
@@ -132,6 +132,17 @@ public class NotificationService {
     public void markNotificationAsRead(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow();
         notification.setRead(true);
+        notificationRepository.save(notification);
+    }
+
+    /**
+     * 알림을 삭제 처리합니다.
+     * @param notificationId 알림 ID
+     */
+    @Transactional
+    public void markNotificationAsDeleted(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow();
+        notification.setDeleted(true);
         notificationRepository.save(notification);
     }
 

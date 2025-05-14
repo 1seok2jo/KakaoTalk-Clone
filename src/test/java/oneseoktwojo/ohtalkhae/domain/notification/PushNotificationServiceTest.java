@@ -178,6 +178,22 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
         assertThat(result.isRead()).isTrue();
     }
 
+    @DisplayName("알림을 삭제 처리합니다.")
+    @Test
+    void markNotificationAsDeleted() {
+        // given
+        WebPushMessage message = createPushMessage("채팅방 이름", "새 메시지");
+        notificationService.sendPushTo(1L, message, LocalDateTime.now());
+        Notification notification = notificationRepository.findByUserIdAndTitle(1L, "채팅방 이름");
+
+        // when
+        notificationService.markNotificationAsDeleted(notification.getNotificationId());
+
+        // then
+        List<NotificationListResponse> result = notificationService.listNotifications(1L);
+        assertThat(result).hasSize(0);
+    }
+
 
     private PushSubscribeRequest createPushSubscribeRequest(Long userId, String endPoint) {
         return PushSubscribeRequest.builder()

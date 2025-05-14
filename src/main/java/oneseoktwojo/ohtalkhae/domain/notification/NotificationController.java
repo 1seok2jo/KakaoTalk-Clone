@@ -50,6 +50,12 @@ public class NotificationController {
         return ApiResponse.success(200, null);
     }
 
+    @DeleteMapping("/{notificationId}")
+    public ApiResponse<Void> markAsDeleted(@PathVariable Long notificationId) {
+        notificationService.markNotificationAsDeleted(notificationId);
+        return ApiResponse.success(200, null);
+    }
+
     private String parseDeviceName(String userAgentString) {
         if (userAgentString != null && !userAgentString.isBlank()) {
             UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
