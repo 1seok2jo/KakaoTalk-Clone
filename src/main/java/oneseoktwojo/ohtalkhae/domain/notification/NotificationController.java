@@ -44,6 +44,12 @@ public class NotificationController {
         return ApiResponse.success(200, notificationService.listNotifications(userId));
     }
 
+    @PutMapping("/{notificationId}")
+    public ApiResponse<Void> markAsRead(@PathVariable Long notificationId) {
+        notificationService.markNotificationAsRead(notificationId);
+        return ApiResponse.success(200, null);
+    }
+
     private String parseDeviceName(String userAgentString) {
         if (userAgentString != null && !userAgentString.isBlank()) {
             UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);

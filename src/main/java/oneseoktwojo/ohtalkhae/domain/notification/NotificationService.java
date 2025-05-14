@@ -124,6 +124,17 @@ public class NotificationService {
                 .toList();
     }
 
+    /**
+     * 알림을 읽음 처리합니다.
+     * @param notificationId 알림 ID
+     */
+    @Transactional
+    public void markNotificationAsRead(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow();
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
+
     private void sendNotifications(List<PushSubscription> subscriptions, WebPushMessage message, LocalDateTime now) {
         for (PushSubscription subscription : subscriptions) {
             try {

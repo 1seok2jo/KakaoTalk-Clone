@@ -162,6 +162,23 @@ class PushNotificationServiceTest extends IntegrationTestSupport {
         assertThat(result).hasSize(1);
     }
 
+    @DisplayName("알림을 읽음 처리합니다.")
+    @Test
+    void markNotificationAsRead() {
+        // given
+        WebPushMessage message = createPushMessage("채팅방 이름", "새 메시지");
+        notificationService.sendPushTo(1L, message, LocalDateTime.now());
+        Notification notification = notificationRepository.findByUserIdAndTitle(1L, "채팅방 이름");
+
+        // when
+        notificationService.markNotificationAsRead(notification.getNotificationId());
+
+        // then
+        Notification result = notificationRepository.findByUserIdAndTitle(1L, "채팅방 이름");
+        assertThat(result.isRead()).isTrue();
+    }
+
+
     private PushSubscribeRequest createPushSubscribeRequest(Long userId, String endPoint) {
         return PushSubscribeRequest.builder()
                 .userId(userId)
