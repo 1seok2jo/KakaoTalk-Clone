@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -37,31 +38,40 @@ public class EmojiService {
 
     public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request, String sellerName) {
         // 1. Emoji 엔티티 생성 및 저장
-        Emoji emoji = new Emoji(
+        Emoji emoji = createEmojiFromRequest(request, sellerName);
+        emojiRepository.save(emoji);
+
+        // 2. EmojiImage 리스트 생성 및 저장
+        List<EmojiImage> emojiImages = createEmojiImages(request.getEmojiUrls(), emoji);
+        emojiImageRepository.saveAll(emojiImages);
+
+        // 3. 응답 객체 생성
+        return createRegisterResponse(emoji);
+    }
+
+    private Emoji createEmojiFromRequest(EmojiRegisterRequest request, String sellerName) {
+        return new Emoji(
                 request.getEmojiName(),
                 request.getEmojiPrice(),
                 request.getMainEmojiUrl(),
                 sellerName
         );
-        emojiRepository.save(emoji);
+    }
 
-        // 2. EmojiImage 리스트 생성 및 저장
-        List<EmojiImage> images = new ArrayList<>();
-        List<String> emojiUrls = request.getEmojiUrls();
-        for (int i = 0; i < emojiUrls.size(); i++) {
-            String imageUrl = emojiUrls.get(i);
-            EmojiImage image = new EmojiImage(imageUrl, i + 1, emoji);
-            images.add(image);
-        }
-        emojiImageRepository.saveAll(images);
+    private List<EmojiImage> createEmojiImages(List<String> emojiUrls, Emoji emoji) {
+        return IntStream.range(0, emojiUrls.size())
+                .mapToObj(i -> new EmojiImage(emojiUrls.get(i), i + 1, emoji))
+                .collect(Collectors.toList());
+    }
 
-        // 3. 응답 객체 생성
+    private EmojiRegisterResponse createRegisterResponse(Emoji emoji) {
         String detailPageUrl = "/emojis/" + emoji.getId();
         return new EmojiRegisterResponse(
                 emoji.getId(),
                 emoji.getEmojiName(),
                 detailPageUrl
         );
+
     }
 
     public List<EmojiListResponse> getAllEmojis() {
@@ -160,19 +170,21 @@ public class EmojiService {
                 emoji.getEmojiPrice(),
                 emoji.getMainEmojiUrl(),
                 emoji.getSellerName(),
-                emojiUrls
+                emojiUrls);
     }
 
     public void addBookmark(String userId, Long emojiId) {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
         emoji.getBookmarkedUserIds().add(userId);
+        emojiRepository.save(emoji);
     }
 
     public void removeBookmark(String userId, Long emojiId) {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
         emoji.getBookmarkedUserIds().remove(userId);
+        emojiRepository.save(emoji);
     }
 
     public void buyEmoji(String userId, Long emojiId) {
@@ -183,6 +195,7 @@ public class EmojiService {
         }
         emoji.getPurchasedUserIds().add(userId);
         emoji.incrementPurchaseCount();
+        emojiRepository.save(emoji);
     }
 
     public EmojiPurchaseCheckResponse checkPurchase(String userId, Long emojiId) {

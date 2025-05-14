@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
-        return ResponseEntity.badRequest().body(ApiResponse.error(400, "유효성 검사 실패", errors));
+        return ResponseEntity.badRequest().body(ApiResponse.error(400, "유효성 검사 실패"));
     }
 
     @ExceptionHandler(Exception.class)
