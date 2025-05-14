@@ -58,10 +58,4 @@ public class ExController {
         log.debug(ex.getMessage());
         return ApiResponse.error(401, "Unauthorized");
     }
-
-    @ExceptionHandler(Exception.class)
-    public ApiResponse<?> handleException(Exception ex) {
-        // 정의되지 않은 모든 예외 처리
-        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-    }
 }
