@@ -8,9 +8,12 @@
     import java.util.Arrays;
     import java.util.List;
     import java.util.UUID;
+
+    import jakarta.validation.Valid;
     import lombok.RequiredArgsConstructor;
     import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
     import oneseoktwojo.ohtalkhae.domain.auth.repository.UserRepository;
+    import oneseoktwojo.ohtalkhae.domain.profile.dto.ProfileBackgroundUpdateRequest;
     import org.springframework.beans.factory.annotation.Value;
     import org.springframework.stereotype.Service;
     import org.springframework.transaction.annotation.Transactional;
@@ -50,5 +53,16 @@
             userRepository.save(user);
 
             return newFilename;
+        }
+
+        public void updateProfileBackground(Long userId, ProfileBackgroundUpdateRequest request) throw IOException {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사죵자를 찾을 수 없습니다. ID: " + userId));
+
+            String backgroundDescription = request.getBackgroundDescription();
+            user.setProfileBackgroundDescription(backgroundDescription);
+
+            MultipartFile backgroundImage = requset.getBackgroundImage();
+            if (backgroundImage != null)
         }
     }
