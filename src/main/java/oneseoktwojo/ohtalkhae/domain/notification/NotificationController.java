@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notification")
-public class PushNotificationController {
+public class NotificationController {
 
-    private final PushNotificationService pushNotificationService;
+    private final NotificationService notificationService;
 
     @PostMapping("/subscribe")
     public void subscribe(@RequestHeader(value = "User-Agent", required = false) String ua,
@@ -24,17 +24,17 @@ public class PushNotificationController {
         request.setDeviceName(parseDeviceName(ua));
         request.setCreatedAt(LocalDateTime.now());
 
-        pushNotificationService.subscribe(request);
+        notificationService.subscribe(request);
     }
 
     @PostMapping("/unsubscribe")
     public void unsubscribe(@RequestBody PushSubscribeRequest request) {
-        pushNotificationService.unsubscribe(request);
+        notificationService.unsubscribe(request);
     }
 
     @GetMapping("/devices")
     public ApiResponse<List<DeviceListResponse>> getSubscribedDevices(@RequestParam Long userId) {
-        List<DeviceListResponse> subscribedDevices = pushNotificationService.getSubscribedDevices(userId);
+        List<DeviceListResponse> subscribedDevices = notificationService.getSubscribedDevices(userId);
         return ApiResponse.success(200, subscribedDevices);
     }
 

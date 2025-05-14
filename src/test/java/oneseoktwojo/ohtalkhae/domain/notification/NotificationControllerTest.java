@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class PushNotificationControllerTest extends ControllerTestSupport {
+class NotificationControllerTest extends ControllerTestSupport {
 
     @Autowired
     MockMvc mockMvc;
