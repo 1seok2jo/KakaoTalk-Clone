@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RestControllerAdvice
@@ -42,6 +43,11 @@ public class ExController {
         return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
+    @ExceptionHandler(NoSuchElementException.class)
+    public ApiResponse<?> handleNoSuchElementException(NoSuchElementException ex) {
+        return ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+
     @ExceptionHandler(IOException.class)
     public ApiResponse<?> handleIOException(IOException ex) {
         return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "프로필 사진 업로드에 실패했습니다 : " + ex.getMessage());
@@ -52,5 +58,10 @@ public class ExController {
         log.debug(ex.getMessage());
         return ApiResponse.error(401, "Unauthorized");
     }
-//    @ExceptionHandler
+
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<?> handleException(Exception ex) {
+        // 정의되지 않은 모든 예외 처리
+        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+    }
 }
