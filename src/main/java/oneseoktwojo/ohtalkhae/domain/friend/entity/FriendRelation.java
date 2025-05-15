@@ -31,7 +31,7 @@ public class FriendRelation {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
-    @Enumerated(EnumType.STRING)  // Enum을 문자로 저장
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FriendStatus status;
 

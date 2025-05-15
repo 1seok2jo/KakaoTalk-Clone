@@ -2,6 +2,10 @@ package oneseoktwojo.ohtalkhae.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
+import oneseoktwojo.ohtalkhae.global.exception.friendexception.DuplicateFriendRequestException;
+import oneseoktwojo.ohtalkhae.global.exception.friendexception.FriendRequestNotFoundException;
+import oneseoktwojo.ohtalkhae.global.exception.friendexception.ResourceNotFoundException;
+import oneseoktwojo.ohtalkhae.global.exception.friendexception.SelfFriendRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
@@ -52,5 +56,25 @@ public class ExController {
         log.debug(ex.getMessage());
         return ApiResponse.error(401, "Unauthorized");
     }
-//    @ExceptionHandler
+
+    // 커스텀 친구 예외 핸들러
+    @ExceptionHandler(SelfFriendRequestException.class)
+    public ApiResponse<?> handleSelfFriend(SelfFriendRequestException ex) {
+        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateFriendRequestException.class)
+    public ApiResponse<?> handleDuplicateFriend(DuplicateFriendRequestException ex) {
+        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    }
+
+    @ExceptionHandler(FriendRequestNotFoundException.class)
+    public ApiResponse<?> handleRequestNotFound(FriendRequestNotFoundException ex) {
+        return ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ApiResponse<?> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
 }
