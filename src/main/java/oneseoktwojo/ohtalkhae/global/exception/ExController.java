@@ -7,6 +7,7 @@ import oneseoktwojo.ohtalkhae.global.exception.friendexception.FriendRequestNotF
 import oneseoktwojo.ohtalkhae.global.exception.friendexception.ResourceNotFoundException;
 import oneseoktwojo.ohtalkhae.global.exception.friendexception.SelfFriendRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
@@ -59,22 +60,34 @@ public class ExController {
 
     // 커스텀 친구 예외 핸들러
     @ExceptionHandler(SelfFriendRequestException.class)
-    public ApiResponse<?> handleSelfFriend(SelfFriendRequestException ex) {
-        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleSelfFriend(SelfFriendRequestException ex) {
+        ApiResponse<?> body = ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(body);
     }
 
     @ExceptionHandler(DuplicateFriendRequestException.class)
-    public ApiResponse<?> handleDuplicateFriend(DuplicateFriendRequestException ex) {
-        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleDuplicateFriend(DuplicateFriendRequestException ex) {
+        ApiResponse<?> body = ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(body);
     }
 
     @ExceptionHandler(FriendRequestNotFoundException.class)
-    public ApiResponse<?> handleRequestNotFound(FriendRequestNotFoundException ex) {
-        return ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleRequestNotFound(FriendRequestNotFoundException ex) {
+        ApiResponse<?> body = ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(body);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ApiResponse<?> handleResourceNotFound(ResourceNotFoundException ex) {
-        return ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFound(ResourceNotFoundException ex) {
+        ApiResponse<?> body = ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(body);
     }
 }
