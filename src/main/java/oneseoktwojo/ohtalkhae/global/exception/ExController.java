@@ -40,7 +40,7 @@ public class ExController {
     
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ApiResponse.error(HttpStatus.BAD_REQUEST, "Invalid Request", ex.getMessage());
+        return ApiResponse.error(HttpStatus.BAD_REQUEST, "Invalid Request");
     }
 
     @ExceptionHandler(IOException.class)
