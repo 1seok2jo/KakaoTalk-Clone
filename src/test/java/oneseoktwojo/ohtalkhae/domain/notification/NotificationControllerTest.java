@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class PushNotificationControllerTest extends ControllerTestSupport {
+class NotificationControllerTest extends ControllerTestSupport {
 
     @Autowired
     MockMvc mockMvc;
@@ -26,7 +26,7 @@ class PushNotificationControllerTest extends ControllerTestSupport {
 
         // when then
         mockMvc.perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @DisplayName("푸시 알림을 구독 해제한다.")
