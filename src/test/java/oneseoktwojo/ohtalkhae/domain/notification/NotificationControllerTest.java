@@ -26,7 +26,7 @@ class NotificationControllerTest extends ControllerTestSupport {
 
         // when then
         mockMvc.perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @DisplayName("푸시 알림을 구독 해제한다.")

@@ -6,6 +6,7 @@ import oneseoktwojo.ohtalkhae.domain.notification.dto.request.PushSubscribeReque
 import oneseoktwojo.ohtalkhae.domain.notification.dto.response.DeviceListResponse;
 import oneseoktwojo.ohtalkhae.domain.notification.dto.response.NotificationListResponse;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,41 +20,43 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/subscribe")
-    public void subscribe(@RequestHeader(value = "User-Agent", required = false) String ua,
+    public ResponseEntity<Void> subscribe(@RequestHeader(value = "User-Agent", required = false) String ua,
                           @RequestBody PushSubscribeRequest request) {
         // 장치 식별용 이름 설정
         request.setDeviceName(parseDeviceName(ua));
         request.setCreatedAt(LocalDateTime.now());
 
         notificationService.subscribe(request);
+        return ResponseEntity.status(201).build();
     }
 
     @PostMapping("/unsubscribe")
-    public void unsubscribe(@RequestBody PushSubscribeRequest request) {
+    public ResponseEntity<Void> unsubscribe(@RequestBody PushSubscribeRequest request) {
         notificationService.unsubscribe(request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/devices")
-    public ApiResponse<List<DeviceListResponse>> getSubscribedDevices(@RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<List<DeviceListResponse>>> getSubscribedDevices(@RequestParam Long userId) {
         List<DeviceListResponse> subscribedDevices = notificationService.getSubscribedDevices(userId);
-        return ApiResponse.success(200, subscribedDevices);
+        return ResponseEntity.ok(ApiResponse.success(200, subscribedDevices));
     }
 
     @GetMapping("/")
-    public ApiResponse<List<NotificationListResponse>> getNotificationList(@RequestParam Long userId) {
-        return ApiResponse.success(200, notificationService.listNotifications(userId));
+    public ResponseEntity<ApiResponse<List<NotificationListResponse>>> getNotificationList(@RequestParam Long userId) {
+        return ResponseEntity.ok(ApiResponse.success(200, notificationService.listNotifications(userId)));
     }
 
     @PutMapping("/{notificationId}")
-    public ApiResponse<Void> markAsRead(@PathVariable Long notificationId) {
+    public ResponseEntity<ApiResponse<Void>> markAsRead(@PathVariable Long notificationId) {
         notificationService.markNotificationAsRead(notificationId);
-        return ApiResponse.success(200, null);
+        return ResponseEntity.ok(ApiResponse.success(200, null));
     }
 
     @DeleteMapping("/{notificationId}")
-    public ApiResponse<Void> markAsDeleted(@PathVariable Long notificationId) {
+    public ResponseEntity<ApiResponse<Void>> markAsDeleted(@PathVariable Long notificationId) {
         notificationService.markNotificationAsDeleted(notificationId);
-        return ApiResponse.success(200, null);
+        return ResponseEntity.ok(ApiResponse.success(200, null));
     }
 
     private String parseDeviceName(String userAgentString) {
