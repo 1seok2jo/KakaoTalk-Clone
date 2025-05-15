@@ -16,7 +16,7 @@ public class CustomAuthenticationEntryPoint implements org.springframework.secur
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(
-                ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), authException.getMessage())
+                ApiResponse.error(HttpStatus.UNAUTHORIZED.value(), "Unauthorized")
         ));
     }
 }

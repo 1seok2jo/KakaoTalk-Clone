@@ -16,7 +16,7 @@ public class CustomAccessDeniedHandler implements org.springframework.security.w
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(
-                ApiResponse.error(HttpStatus.FORBIDDEN.value(), accessDeniedException.getMessage())
+                ApiResponse.error(HttpStatus.FORBIDDEN.value(), "Forbidden")
         ));
     }
 }
