@@ -3,9 +3,8 @@ package oneseoktwojo.ohtalkhae.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,30 +16,22 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @RestControllerAdvice
-public class ExController {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<?> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-
-        return ApiResponse.error(400, "Invalid Values", errors);
-    }
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResponse<?> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         log.debug(ex.getMessage());
         return ApiResponse.error(400, "Invalid Request Body");
     }
-    
+
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ApiResponse.error(400, ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<?>> handleIllegalStateException(IllegalStateException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(409, ex.getMessage()));
     }
 
     @ExceptionHandler(NoSuchElementException.class)
@@ -53,9 +44,17 @@ public class ExController {
         return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "프로필 사진 업로드에 실패했습니다 : " + ex.getMessage());
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ApiResponse<?> handleGeneralException(Exception ex) {
-        log.debug(ex.getMessage());
-        return ApiResponse.error(401, "Unauthorized");
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(ApiResponse.error(400, "유효성 검사 실패"));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<?>> handleGenericException(Exception ex) {
+        return ResponseEntity.internalServerError().body(ApiResponse.error(500, "서버 내부 오류: " + ex.getMessage()));
     }
 }
