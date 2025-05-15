@@ -36,4 +36,5 @@ public class User {
     private String statusMessage;
     private String profileBackgroundDescription;
     private String profileBackgroundImagePath;
+    private boolean isPublic = true;
 }

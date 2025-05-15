@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.entity.User;
 import oneseoktwojo.ohtalkhae.domain.auth.repository.UserRepository;
 import oneseoktwojo.ohtalkhae.domain.profile.dto.ProfileBackgroundUpdateRequest;
+import oneseoktwojo.ohtalkhae.domain.profile.dto.ProfileVisibilityUpdateRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +87,13 @@ public class UserProfileService {
             user.setProfileBackgroundImagePath(newFilename);
         }
 
+        userRepository.save(user);
+    }
+
+    public void updateProfileVisibility(Long userId, ProfileVisibilityUpdateRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID:" + userId));
+        user.setPublic(request.isPublic());
         userRepository.save(user);
     }
 }

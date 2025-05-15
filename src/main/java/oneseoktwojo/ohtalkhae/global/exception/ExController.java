@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RestControllerAdvice
@@ -51,6 +52,16 @@ public class ExController {
     public ApiResponse<?> handleGeneralException(Exception ex) {
         log.debug(ex.getMessage());
         return ApiResponse.error(401, "Unauthorized");
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ApiResponse<?> handleNoSuchElementException(NoSuchElementException ex) {
+        return ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+
+    @ExceptionHandler(org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException.class)
+    public ApiResponse<?> handleFileSizeLimitExceededException(org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException ex){
+        return ApiResponse.error(HttpStatus.PAYLOAD_TOO_LARGE.value(), "업로드 파일 크기가 제한을 초과했습니다.");
     }
 //    @ExceptionHandler
 }
