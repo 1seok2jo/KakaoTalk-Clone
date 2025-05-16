@@ -11,6 +11,8 @@ import oneseoktwojo.ohtalkhae.domain.auth.enums.UserRegisterResult;
 import oneseoktwojo.ohtalkhae.domain.auth.service.RefreshTokenService;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,13 +29,13 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ApiResponse<?> register(@Valid @RequestBody UserRegisterRequest request) {
+    public ResponseEntity<ApiResponse<?>> register(@Valid @RequestBody UserRegisterRequest request) {
         UserRegisterResult result = userService.register(request);
         return createRegisterResponse(result);
     }
 
     @PostMapping("/refresh")
-    public ApiResponse<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+    public ResponseEntity<ApiResponse<?>> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
         String refreshToken = request.getRefreshToken();
         String accessToken = request.getAccessToken();
         return refreshTokenService.findByToken(refreshToken)
@@ -42,23 +44,23 @@ public class AuthController {
                 .map(newRefreshToken -> {
                     String role = jwtUtil.getRole(accessToken);
                     String newAccessToken = jwtUtil.createJwt(newRefreshToken.getUsername(), role, accessTokenExpirationTime);
-                    return ApiResponse.success(200, new TokenResponse(newAccessToken, newRefreshToken.getToken()));
+                    return ApiResponse.success(HttpStatus.OK, new TokenResponse(newAccessToken, newRefreshToken.getToken()));
                 })
                 .orElseThrow(() -> new RuntimeException("Invalid refresh token."));
     }
 
     @GetMapping("/test")
-    public ApiResponse<?> authTest() {
-        return ApiResponse.success(200, "Authentication test successful.");
+    public ResponseEntity<ApiResponse<?>> authTest() {
+        return ApiResponse.success(HttpStatus.OK, "Authentication test successful.");
     }
 
-    private ApiResponse<?> createRegisterResponse(UserRegisterResult result) {
+    private ResponseEntity<ApiResponse<?>> createRegisterResponse(UserRegisterResult result) {
         return switch (result) {
-            case SUCCESS -> ApiResponse.success(200, "User registered successfully.");
-            case DUPLICATED_USERNAME -> ApiResponse.error(400, "Duplicated username.");
-            case DUPLICATED_EMAIL -> ApiResponse.error(400, "Duplicated email.");
-            case DUPLICATED_PHONE -> ApiResponse.error(400, "Duplicated phone number.");
-            default -> ApiResponse.error(500, "Unknown error occurred.");
+            case SUCCESS -> ApiResponse.success(HttpStatus.OK, "User registered successfully.");
+            case DUPLICATED_USERNAME -> ApiResponse.error(HttpStatus.BAD_REQUEST, "Duplicated username.");
+            case DUPLICATED_EMAIL -> ApiResponse.error(HttpStatus.BAD_REQUEST, "Duplicated email.");
+            case DUPLICATED_PHONE -> ApiResponse.error(HttpStatus.BAD_REQUEST, "Duplicated phone number.");
+            default -> ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown error occurred.");
         };
     }
 }

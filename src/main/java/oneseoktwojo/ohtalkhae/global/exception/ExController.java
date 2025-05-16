@@ -23,7 +23,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<?> handleValidationExceptions(
+    public ResponseEntity<ApiResponse<?>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
 
@@ -33,29 +33,29 @@ public class ExController {
             errors.put(fieldName, errorMessage);
         });
 
-        return ApiResponse.error(400, "Invalid Values", errors);
+        return ApiResponse.error(HttpStatus.BAD_REQUEST, "Invalid Values", errors);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ApiResponse<?> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ApiResponse<?>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         log.debug(ex.getMessage());
-        return ApiResponse.error(400, "Invalid Request Body");
+        return ApiResponse.error(HttpStatus.BAD_REQUEST, "Invalid Request Body");
     }
     
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ApiResponse.error(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ApiResponse.error(HttpStatus.BAD_REQUEST, "Invalid Request");
     }
 
     @ExceptionHandler(IOException.class)
-    public ApiResponse<?> handleIOException(IOException ex) {
-        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "프로필 사진 업로드에 실패했습니다 : " + ex.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleIOException(IOException ex) {
+        return ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "프로필 사진 업로드에 실패했습니다 : " + ex.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ApiResponse<?> handleGeneralException(Exception ex) {
+    public ResponseEntity<ApiResponse<?>> handleGeneralException(Exception ex) {
         log.debug(ex.getMessage());
-        return ApiResponse.error(401, "Unauthorized");
+        return ApiResponse.error(HttpStatus.UNAUTHORIZED, "Unauthorized");
     }
 
     // 커스텀 친구 예외 핸들러

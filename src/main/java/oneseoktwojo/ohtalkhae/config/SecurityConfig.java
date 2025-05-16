@@ -3,6 +3,8 @@ package oneseoktwojo.ohtalkhae.config;
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.auth.filter.JWTFilter;
 import oneseoktwojo.ohtalkhae.domain.auth.filter.LoginFilter;
+import oneseoktwojo.ohtalkhae.domain.auth.handler.CustomAccessDeniedHandler;
+import oneseoktwojo.ohtalkhae.domain.auth.handler.CustomAuthenticationEntryPoint;
 import oneseoktwojo.ohtalkhae.domain.auth.jwt.JWTUtil;
 import oneseoktwojo.ohtalkhae.domain.auth.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +54,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/verify").permitAll()
                         .requestMatchers("/notification/**").permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling(exceptionConfig -> exceptionConfig.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
                 .addFilterAt(new LoginFilter(accessTokenExpirationTime, authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
