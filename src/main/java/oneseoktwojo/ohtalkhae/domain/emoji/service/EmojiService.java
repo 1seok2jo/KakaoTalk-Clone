@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import lombok.Builder;
+
 @Service
 @RequiredArgsConstructor
 public class EmojiService {
@@ -27,13 +29,14 @@ public class EmojiService {
 
     // Emoji → EmojiListResponse 로 자동변환해주는 헬퍼 메소드
     private EmojiListResponse toListResponse(Emoji emoji) {
-        return new EmojiListResponse(
-                emoji.getId(),
-                emoji.getEmojiName(),
-                emoji.getEmojiPrice(),
-                emoji.getMainEmojiUrl(),
-                emoji.getSellerName()
-        );
+        return EmojiListResponse.builder()
+                .emojiId(emoji.getId())
+                .emojiName(emoji.getEmojiName())
+                .emojiPrice(emoji.getEmojiPrice())
+                .mainEmojiUrl(emoji.getMainEmojiUrl())
+                .sellerName(emoji.getSellerName())
+                .build();
+
     }
 
     public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request, String sellerName) {
@@ -164,13 +167,14 @@ public class EmojiService {
                 .map(EmojiImage::getImageUrl)
                 .collect(Collectors.toList());
 
-        return new EmojiDetailResponse(
-                emoji.getId(),
-                emoji.getEmojiName(),
-                emoji.getEmojiPrice(),
-                emoji.getMainEmojiUrl(),
-                emoji.getSellerName(),
-                emojiUrls);
+        return EmojiDetailResponse.builder()
+                .emojiId(emoji.getId())
+                .emojiName(emoji.getEmojiName())
+                .emojiPrice(emoji.getEmojiPrice())
+                .mainEmojiUrl(emoji.getMainEmojiUrl())
+                .sellerName(emoji.getSellerName())
+                .emojiUrls(emojiUrls)
+                .build();
     }
 
     public void addBookmark(String userId, Long emojiId) {
