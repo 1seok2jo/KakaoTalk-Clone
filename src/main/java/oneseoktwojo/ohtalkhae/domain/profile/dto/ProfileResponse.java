@@ -11,10 +11,14 @@ public class ProfileResponse {
     private String nickname;
     private String statusMessage;
     private String profileImagePath;
+    private String profileBackgroundDescription;
+    private String profileBackgroundImagePath;
 
     public ProfileResponse(User user) {
         this.nickname = user.getNickname();
         this.statusMessage = user.getStatusMessage();
         this.profileImagePath = user.getProfileImagePath();
+        this.profileBackgroundDescription = user.getProfileBackgroundDescription();
+        this.profileBackgroundImagePath = user.getProfileBackgroundImagePath();
     }
 }
