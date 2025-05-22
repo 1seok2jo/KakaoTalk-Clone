@@ -1,9 +1,8 @@
 package oneseoktwojo.ohtalkhae.domain.emoji.entity;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +23,7 @@ public class EmojiImage {
     @JoinColumn(name = "emoji_id")
     private Emoji emoji;
 
+    @Builder
     public EmojiImage(String imageUrl, int sortOrder, Emoji emoji) {
         this.imageUrl = imageUrl;
         this.sortOrder = sortOrder;

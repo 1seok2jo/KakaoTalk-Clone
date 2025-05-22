@@ -1,5 +1,6 @@
 package oneseoktwojo.ohtalkhae.domain.emoji.service;
 
+
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.request.EmojiRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiDetailResponse;
@@ -10,15 +11,17 @@ import oneseoktwojo.ohtalkhae.domain.emoji.entity.Emoji;
 import oneseoktwojo.ohtalkhae.domain.emoji.entity.EmojiImage;
 import oneseoktwojo.ohtalkhae.domain.emoji.repository.EmojiImageRepository;
 import oneseoktwojo.ohtalkhae.domain.emoji.repository.EmojiRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.cache.annotation.Cacheable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import lombok.Builder;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +42,10 @@ public class EmojiService {
 
     }
 
-    public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request, String sellerName) {
+    @Transactional
+    public EmojiRegisterResponse registerEmoji(EmojiRegisterRequest request) {
         // 1. Emoji 엔티티 생성 및 저장
-        Emoji emoji = createEmojiFromRequest(request, sellerName);
+        Emoji emoji = createEmojiFromRequest(request, request.getSellerName());
         emojiRepository.save(emoji);
 
         // 2. EmojiImage 리스트 생성 및 저장
@@ -53,17 +57,21 @@ public class EmojiService {
     }
 
     private Emoji createEmojiFromRequest(EmojiRegisterRequest request, String sellerName) {
-        return new Emoji(
-                request.getEmojiName(),
-                request.getEmojiPrice(),
-                request.getMainEmojiUrl(),
-                sellerName
-        );
+        return Emoji.builder()
+                .emojiName(request.getEmojiName())
+                .emojiPrice(request.getEmojiPrice())
+                .mainEmojiUrl(request.getMainEmojiUrl())
+                .sellerName(sellerName)
+                .build();
     }
 
     private List<EmojiImage> createEmojiImages(List<String> emojiUrls, Emoji emoji) {
         return IntStream.range(0, emojiUrls.size())
-                .mapToObj(i -> new EmojiImage(emojiUrls.get(i), i + 1, emoji))
+                .mapToObj(i -> EmojiImage.builder()
+                        .imageUrl(emojiUrls.get(i))
+                        .sortOrder(i+1)
+                        .emoji(emoji)
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -77,16 +85,13 @@ public class EmojiService {
 
     }
 
-    public List<EmojiListResponse> getAllEmojis() {
-        return emojiRepository.findAll().stream()
-                .map(emoji -> new EmojiListResponse(
-                        emoji.getId(),
-                        emoji.getEmojiName(),
-                        emoji.getEmojiPrice(),
-                        emoji.getMainEmojiUrl(),
-                        emoji.getSellerName()
-                ))
+    // 전체 이모티콘 목록 조회, 페이징 처리
+    public Page<EmojiListResponse> getAllEmojis(Pageable pageable) {
+        Page<Emoji> emojiPage = emojiRepository.findAll(pageable);
+        List<EmojiListResponse> content = emojiPage.stream()
+                .map(this::toListResponse)
                 .collect(Collectors.toList());
+        return new PageImpl<>(content, pageable, emojiPage.getTotalElements());
     }
 
     // 구매횟수(purchaseCount)를 기준으로 내림차순 정렬하여, 상위 10개만 보여줌
@@ -94,13 +99,7 @@ public class EmojiService {
         return emojiRepository.findAll().stream()
                 .sorted(Comparator.comparingInt(emoji -> -emoji.getPurchaseCount()))
                 .limit(10)
-                .map(emoji -> new EmojiListResponse(
-                        emoji.getId(),
-                        emoji.getEmojiName(),
-                        emoji.getEmojiPrice(),
-                        emoji.getMainEmojiUrl(),
-                        emoji.getSellerName()
-                ))
+                .map(this::toListResponse)
                 .collect(Collectors.toList());
     }
 
@@ -108,52 +107,28 @@ public class EmojiService {
         return emojiRepository.findAll().stream()
                 .sorted(Comparator.comparing(Emoji::getCreatedAt).reversed())
                 .limit(10)
-                .map(emoji -> new EmojiListResponse(
-                        emoji.getId(),
-                        emoji.getEmojiName(),
-                        emoji.getEmojiPrice(),
-                        emoji.getMainEmojiUrl(),
-                        emoji.getSellerName()
-                ))
+                .map(this::toListResponse)
                 .collect(Collectors.toList());
     }
 
     public List<EmojiListResponse> searchEmojis(String keyword) {
         return emojiRepository.findAll().stream()
                 .filter(emoji -> emoji.getEmojiName().toLowerCase().contains(keyword.toLowerCase()))
-                .map(emoji -> new EmojiListResponse(
-                        emoji.getId(),
-                        emoji.getEmojiName(),
-                        emoji.getEmojiPrice(),
-                        emoji.getMainEmojiUrl(),
-                        emoji.getSellerName()
-                ))
+                .map(this::toListResponse)
                 .collect(Collectors.toList());
     }
 
     public List<EmojiListResponse> getMyEmojis(String userId) {
         return emojiRepository.findAll().stream()
                 .filter(emoji -> emoji.getPurchasedUserIds().contains(userId))
-                .map(emoji -> new EmojiListResponse(
-                        emoji.getId(),
-                        emoji.getEmojiName(),
-                        emoji.getEmojiPrice(),
-                        emoji.getMainEmojiUrl(),
-                        emoji.getSellerName()
-                ))
+                .map(this::toListResponse)
                 .collect(Collectors.toList());
     }
 
     public List<EmojiListResponse> getBookmarkedEmojis(String userId) {
         return emojiRepository.findAll().stream()
                 .filter(emoji -> emoji.getBookmarkedUserIds().contains(userId))
-                .map(emoji -> new EmojiListResponse(
-                        emoji.getId(),
-                        emoji.getEmojiName(),
-                        emoji.getEmojiPrice(),
-                        emoji.getMainEmojiUrl(),
-                        emoji.getSellerName()
-                ))
+                .map(this::toListResponse)
                 .collect(Collectors.toList());
     }
 
@@ -161,8 +136,7 @@ public class EmojiService {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
 
-        List<String> emojiUrls = emojiImageRepository.findAll().stream()
-                .filter(image -> image.getEmoji().getId().equals(emojiId))
+        List<String> emojiUrls = emojiImageRepository.findByEmojiId(emojiId).stream()
                 .sorted(Comparator.comparingInt(EmojiImage::getSortOrder))
                 .map(EmojiImage::getImageUrl)
                 .collect(Collectors.toList());
@@ -180,17 +154,24 @@ public class EmojiService {
     public void addBookmark(String userId, Long emojiId) {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
-        emoji.getBookmarkedUserIds().add(userId);
-        emojiRepository.save(emoji);
+        // 중복 북마크 방지
+        if(!emoji.getBookmarkedUserIds().contains(userId)) {
+            emoji.getBookmarkedUserIds().add(userId);
+            emojiRepository.save(emoji);
+        }
     }
 
     public void removeBookmark(String userId, Long emojiId) {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
-        emoji.getBookmarkedUserIds().remove(userId);
-        emojiRepository.save(emoji);
+        // 북마크 해제 하려는게 해당 유저가 맞는지 확인
+        if(emoji.getBookmarkedUserIds().contains(userId)) {
+            emoji.getBookmarkedUserIds().remove(userId);
+            emojiRepository.save(emoji);
+        }
     }
 
+    @Transactional // 구매는 중요하므로 트랜잭션 처리
     public void buyEmoji(String userId, Long emojiId) {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
@@ -202,6 +183,8 @@ public class EmojiService {
         emojiRepository.save(emoji);
     }
 
+    // 캐싱 적용, redis 같은거 없이 기본 메모리 캐시로만 사용
+    @Cacheable(value = "emojiPurchaseCheck", key = "#userId + '_' + #emojiId")
     public EmojiPurchaseCheckResponse checkPurchase(String userId, Long emojiId) {
         Emoji emoji = emojiRepository.findById(emojiId)
                 .orElseThrow(() -> new IllegalArgumentException("이모티콘을 찾을 수 없습니다."));
