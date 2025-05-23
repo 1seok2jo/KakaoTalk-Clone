@@ -1,5 +1,6 @@
 package oneseoktwojo.ohtalkhae.domain.emoji.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiListResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiRegisterResponse;
@@ -9,6 +10,8 @@ import oneseoktwojo.ohtalkhae.domain.emoji.dto.request.EmojiRegisterRequest;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiDetailResponse;
 import oneseoktwojo.ohtalkhae.domain.emoji.dto.response.EmojiPurchaseCheckResponse;
 import oneseoktwojo.ohtalkhae.global.dto.ApiResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/emojis")
+@RequestMapping("/emojis")
 @RequiredArgsConstructor
 public class EmojiController {
 
@@ -25,16 +28,16 @@ public class EmojiController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<EmojiRegisterResponse>> registerEmoji(
-            @RequestBody EmojiRegisterRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        String sellerName = userDetails.getUsername();
-        EmojiRegisterResponse response = emojiService.registerEmoji(request, sellerName);
-        return ResponseEntity.ok(ApiResponse.success(200, response));
+            @RequestBody @Valid EmojiRegisterRequest request) {
+        EmojiRegisterResponse response = emojiService.registerEmoji(request);
+        ApiResponse<EmojiRegisterResponse> apiResponse = new ApiResponse<>(200, "이모티콘 등록 성공", response);
+        return ResponseEntity.ok(apiResponse);
     }
 
+    // 페이징 처리된 전체 조회
     @GetMapping
-    public ResponseEntity<ApiResponse<List<EmojiListResponse>>> getAllEmojis() {
-        List<EmojiListResponse> result = emojiService.getAllEmojis();
+    public ResponseEntity<ApiResponse<Page<EmojiListResponse>>> getAllEmojis(Pageable pageable) {
+        Page<EmojiListResponse> result = emojiService.getAllEmojis(pageable);
         return ResponseEntity.ok(ApiResponse.success(200, result));
     }
 
@@ -97,12 +100,12 @@ public class EmojiController {
         return ResponseEntity.ok(ApiResponse.success(200, null));
     }
 
-    @PostMapping("/buy")
+    @PostMapping("{emojiId}/buy")
     public ResponseEntity<ApiResponse<Void>> buyEmoji(
-            @RequestBody EmojiBuyRequest request,
+            @PathVariable Long emojiId,
             @AuthenticationPrincipal UserDetails userDetails) {
         String userId = userDetails.getUsername();
-        emojiService.buyEmoji(userId, request.getEmojiId());
+        emojiService.buyEmoji(userId, emojiId);
         return ResponseEntity.ok(ApiResponse.success(200, null));
     }
 
